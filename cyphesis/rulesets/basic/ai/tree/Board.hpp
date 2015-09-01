@@ -10,7 +10,7 @@
 #include "BoardBase.hpp"
 
 #include <string>
-#include <list>
+#include <vector>
 
 namespace utilai
 {
@@ -22,8 +22,8 @@ class BoardBase;
 class ChessTree;
 class ChessTreeNode;
 
-typedef std::list<ChessTreeNode> ChessTreeNodes;
-typedef std::list<ChessTreeNode>::iterator ChessTreeNodesIter;
+typedef std::vector<ChessTreeNode> ChessTreeNodes;
+typedef std::vector<ChessTreeNode>::iterator ChessTreeNodesIter;
 
 class Board : protected Grid, BoardBase 
 {
@@ -47,12 +47,12 @@ public:
 	//note that the treenode is optional
 	void makeMove(std::string& name, const int& row, 
 			const int& col, const int& oldrow, const int& oldcol,
-			ChesstreeNode& t);
+			ChessTreeNode& t);
 	//let the AI move based on a treenode
 	bool searchMove(std::string& name, ChessTreeNode& t);
 
 	//test if the move has been done
-	bool legalmove(ChessTreeNode& t, int& row, int& col, 
+	bool legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, 
 			int& oldrow, int& oldcol);
 	//list based search on best single move
 	bool move(std::string& name, ChessTreeNode& t);
@@ -94,8 +94,19 @@ private:
 
 public:	
 	Board& getBoard() { return (*this); }
-	std::string getPlayerName() { return playername; }
-	std::string getNPCPlayerName() { return blackplayername; }
+	char getWhiteBoardXY(int x, int y) { return (getWhiteBoard())[y][x]; }
+	char getBlackBoardXY(int x, int y) { return (getBlackBoard())[y][x]; }
+	std::string& getPlayerName() { return playername; }
+	std::string& getNPCPlayerName() { return blackplayername; }
+
+public:
+	Board operator=(Board& b) { 
+		/*if (b == *this)
+			return *this;
+		*/
+		//FIXME deep copy of BoardBase	
+
+	}
 };
 
 }//namespace chess 

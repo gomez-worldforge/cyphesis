@@ -21,12 +21,13 @@ public:
 	~ChessTree() {}
 
 	//make a tree for a move
-	int makeTree(const Board& current);
+	bool buildTree(const Board& current);
 	//prepare chessboard with pieces 
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
+protected:
 	//main recursive algorithm
-	int depth_first_search(ChessTreeNode& node);
+	bool breadthFirstSearch(ChessTreeNode& node);
 
 private:
 	ChessTreeNode root;

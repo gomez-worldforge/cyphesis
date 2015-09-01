@@ -80,10 +80,10 @@ private:
 	char blackboard[8][8];
 
 public:
-	Board operator=(Board& b) { 
-		if (b == *this)
+	BoardBase operator=(BoardBase& b) { 
+		/*if (b == *this)
 			return *this;
-
+		*/
 		//FIXME deep copy whiteboard and blackboard
 
 	}

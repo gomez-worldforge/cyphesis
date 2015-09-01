@@ -35,11 +35,11 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 				
 			}
 		} else {//we stroke a chess piece
-			for (ChessNodesIter vi = route.begin();
+			for (ChessTreeNodesIter vi = route.begin();
 					vi != route.end();
 					vi++) {
 				int row = 0, col = 0, oldrow = 0, oldcol = 0;
-				if (!legalmove(goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+				if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
 					return false;
 				else {
 					moveWhiteChessPiece(row,col,oldrow,oldcol);
@@ -59,11 +59,11 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 				
 			}
 		} else {//we stroke a chess piece
-			for (ChessNodesIter vi = route.begin();
+			for (ChessTreeNodesIter vi = route.begin();
 					vi != route.end();
 					vi++) {
 				int row = 0, col = 0, oldrow = 0, oldcol = 0;
-				if (!legalmove(goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+				if (!legalmove(blackplayername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
 					return false;
 				else {
 					moveBlackChessPiece(row,col,oldrow,oldcol);
@@ -78,45 +78,90 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 	return false;
 }
 
-bool Board::legalmove(ChessTreeNode& ti, int& row, int& col, int& oldrow, int& oldcol) {
-	int i = 0, j = 0;
+bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, int& oldrow, int& oldcol) {
+	
+	if (name == playername) {
+		int i = 0, j = 0;
 
-	for (i = 0; i < 8; i++) {
-		for (j = 0; j < 8; j++) {
-			if ((t.get())[i][j] >> (get())[i][j] == 0) 
-				continue;
-			else {
-				if ((t.get())[i][j] == 7) { 
-					oldrow = i;
-					oldcol = j;
-				} else {
-					row = i;
-					col = j;
-				}
-			}		
-			
+		for (i = 0; i < 8; i++) {
+			for (j = 0; j < 8; j++) {
+				if ((t.get().getWhiteBoardXY(i,j)) >> (getWhiteBoardXY(i,j)) == 0) 
+					continue;
+				else {
+					if ((t.get().getWhiteBoardXY(i,j)) == 7) { 
+						oldrow = i;
+						oldcol = j;
+					} else {
+						row = i;
+						col = j;
+					}
+				}		
+				
+			}
 		}
-	}
 
-	j++;
+		j++;
 
-	for ( ; i < 8; i++) {
-		for ( ; j < 8; j++) {
-			if ((t.get())[i][j] >> (get())[i][j] == 0) 
-				continue;
-			else {
-				if ((t.get())[i][j] == 7) { 
-					oldrow = i;
-					oldcol = j;
-					return true;
-				} else {
-					row = i;
-					col = j;
-					return false;
-				}
-			}		
+		for ( ; i < 8; i++) {
+			for ( ; j < 8; j++) {
+				if ((t.get().getWhiteBoardXY(i,j)) >> (getWhiteBoardXY(i,j)) == 0) 
+					continue;
+				else {
+					if ((t.get().getWhiteBoardXY(i,j)) == 7) { 
+						oldrow = i;
+						oldcol = j;
+						return true;
+					} else {
+						row = i;
+						col = j;
+						return false;
+					}
+				}		
 			
+			}
 		}
+	} else if (blackplayername == name) {
+		int i = 0, j = 0;
+
+		for (i = 0; i < 8; i++) {
+			for (j = 0; j < 8; j++) {
+				if ((t.get().getBlackBoardXY(i,j)) >> (getBlackBoardXY(i,j)) == 0) 
+					continue;
+				else {
+					if ((t.get().getBlackBoardXY(i,j)) == 7) { 
+						oldrow = i;
+						oldcol = j;
+					} else {
+						row = i;
+						col = j;
+					}
+				}		
+				
+			}
+		}
+
+		j++;
+
+		for ( ; i < 8; i++) {
+			for ( ; j < 8; j++) {
+				if ((t.get().getBlackBoardXY(i,j)) >> (getBlackBoardXY(i,j)) == 0) 
+					continue;
+				else {
+					if ((t.get().getBlackBoardXY(i,j)) == 7) { 
+						oldrow = i;
+						oldcol = j;
+						return true;
+					} else {
+						row = i;
+						col = j;
+						return false;
+					}
+				}		
+			
+			}
+		}
+	} else if (blackplayername == name) {
+
 	}
 	return false;
 }
