@@ -22,7 +22,7 @@ public:
 	~ChessTreeNode() {}
 
 	void addNode(ChessTreeNode tn) { static_cast<TreeNode>(*this).addNode(tn); }
-	void initialize() { board.initialize(); }
+	void startGame() { board.startGame(); }
 protected:
 	void set(const Board& b) { board = const_cast<Board&>(b); }
 	Board& get() { return board; }

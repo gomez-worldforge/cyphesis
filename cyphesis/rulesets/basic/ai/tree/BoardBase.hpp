@@ -21,7 +21,7 @@ public:
 	~BoardBase() {}
 
 	//initialize chess board
-	void initialize() {
+	void startGame() {
 		//pawns
 		for (int i = 0; i < 8; i++) { 
 			whiteboard[1][i] = 5;
@@ -50,6 +50,9 @@ public:
 		whiteboard[0][3] = 0;	
 		blackboard[0][3] = 0;	
 	} 
+
+	int moveWhiteChessPiece(const int &r, const int& c, const int & oldr, const int& oldc);
+	int moveBlackChessPiece(const int &r, const int& c, const int & oldr, const int& oldc);
 
 	int moveWhitePawn(const int &r, const int& c);
 	int moveBlackPawn(const int &r, const int& c);

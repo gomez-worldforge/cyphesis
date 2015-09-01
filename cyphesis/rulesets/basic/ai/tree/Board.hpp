@@ -23,7 +23,7 @@ class ChessTree;
 class ChessTreeNode;
 
 typedef std::list<ChessTreeNode> ChessTreeNodes;
-//FIXME typedef std::list<ChessTreeNode&>::iterator ChessTreeNodesIter;
+typedef std::list<ChessTreeNode>::iterator ChessTreeNodesIter;
 
 class Board : protected Grid, BoardBase 
 {
@@ -45,6 +45,7 @@ public:
 
 	bool beginMove(std::string& name, ChessTreeNode& t);
 
+	bool legalmove(ChessTreeNode& t, int& row, int& col, int& oldrow, int& oldcol);
 	bool move(std::string& name, ChessTreeNode& t);
 	//pawns
 	bool movePawn(std::string& name, char r, char c);

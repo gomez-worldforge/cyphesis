@@ -73,6 +73,16 @@ int BoardBase::moveBlackKing(const int &r, const int& c, const int& oldr, const 
 	blackboard[oldr][oldc] = 7; 
 }	
 
+int BoardBase::moveWhiteChessPiece(const int &r, const int& c, const int& oldr, const int& oldc) {
+	whiteboard[r][c] = whiteboard[oldr][oldc];
+	whiteboard[oldr][oldc] = 7;
+}	
+
+int BoardBase::moveBlackChessPiece(const int &r, const int& c, const int& oldr, const int& oldc) {
+	blackboard[r][c] = blackboard[oldr][oldc];
+	blackboard[oldr][oldc] = 7;
+}	
+
 }//namespace chess 
 }//namespace tree 
 }//namespace utilai	

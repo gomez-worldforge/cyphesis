@@ -17,7 +17,74 @@ bool Board::beginMove(std::string& name, ChessTreeNode& t) {
 		move(name, t);
 	} else if (blackplayername == name) {
 		move(name, t);
+		
+		if (goodnodes.empty()) {//we did not strike a chess piece	
+			if (route.empty())
+				return false;
+			else {
+				
+			}
+		} else {//we stroke a chess piece
+			for (ChessNodesIter vi = route.begin();
+					vi != route.end();
+					vi++) {
+				int row = 0, col = 0, oldrow = 0, oldcol = 0;
+				if (!legalmove(goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+					return false;
+				else {
+					moveBlackChessPiece(row,col,oldrow,oldcol);
+					percentage = 1;
+					return true;		
+				}
+			}
+		//percentage = 1;
+		}
 	} 
+
+	return false;
+}
+
+bool Board::legalmove(ChessTreeNode& ti, int& row, int& col, int& oldrow, int& oldcol) {
+	int i = 0, j = 0;
+
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 8; j++) {
+			if ((t.get())[i][j] >> (get())[i][j] == 0) 
+				continue;
+			else {
+				if ((t.get())[i][j] == 7) { 
+					oldrow = i;
+					oldcol = j;
+				} else {
+					row = i;
+					col = j;
+				}
+			}		
+			
+		}
+	}
+
+	j++;
+
+	for ( ; i < 8; i++) {
+		for ( ; j < 8; j++) {
+			if ((t.get())[i][j] >> (get())[i][j] == 0) 
+				continue;
+			else {
+				if ((t.get())[i][j] == 7) { 
+					oldrow = i;
+					oldcol = j;
+					return true;
+				} else {
+					row = i;
+					col = j;
+					return false;
+				}
+			}		
+			
+		}
+	}
+	return false;
 }
 
 bool Board::move(std::string& name, ChessTreeNode& t)

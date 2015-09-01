@@ -23,7 +23,7 @@ public:
 
 	int makeTree(const Board& current);
 	//prepare chessboard with pieces 
-        void initialize() { static_cast<ChessTreeNode&>(*this).initialize(); } 
+        void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
 	int depth_first_search();
 	int breath_first_search();
