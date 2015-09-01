@@ -1,0 +1,10 @@
+01 sep 2015:
+	. added a mode flag for altering tree search
+	. added full Pawn and Knight AI for 2 AI players
+	. FIXME add some extra constraints around percentage tests, losing speed
+
+31 aug 2015:
+	. added player names to board constructor
+
+29 aug 2015:
+	start of Chess NPC/AI/Tree code

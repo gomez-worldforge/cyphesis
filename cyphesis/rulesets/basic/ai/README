@@ -1,0 +1,4 @@
+Drop this directory named ai/ into the rulesets/basic directory of the
+cyphesis server source tree (which you can get at https://github.com/worldforge
+
+Then patch the Makefile.am in rulesets so that the source compiles
