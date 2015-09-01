@@ -59,7 +59,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < 8-j; k++) {
@@ -70,7 +70,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < i; k++) {
@@ -81,7 +81,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < j; k++) {
@@ -92,7 +92,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					if (!mode)	
@@ -110,7 +110,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < 8-j; k++) {
@@ -122,7 +122,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < i; k++) {
@@ -134,7 +134,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					for (int k = 1; k < j; k++) {
@@ -146,7 +146,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							else // true, cache good node
 								goodnodes.push_back(*n);
 						t.addNode(*n);
-						if (mode)
+						if (mode > 0)
 							route.push_back(*n);
 					}
 					if (!mode)
@@ -154,9 +154,111 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					t.addNode(*n);
 					break;
 				}	
-				case 1:{	//queen
+				case 1:{//queen
+					ChessTreeNode *n = new ChessTreeNode(*this);
+					for (int k = 1; k < 8-i; k++) {
+						if (i != j)
+							continue;
+						if (!moveQueen(name, k,i,j,i))
+							if (!strikeBishop(name, k,i,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < 8-j; k++) {
+						if (i != j)
+							continue;
+						if (!moveQueen(name, j,k,j,i))
+							if (!strikeBishop(name, j,k,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < i; k++) {
+						if (i != j)
+							continue;
+						if (!moveQueen(name, k,i,j,i))
+							if (!strikeBishop(name, k,i,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < j; k++) {
+						if (i != j)
+							continue;
+						if (!moveQueen(name, j,k,j,i))
+							if (!strikeBishop(name, j,k,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					n = new ChessTreeNode(*this);
+					for (int k = 1; k < 8-i; k++) {
+						if (!moveQueen(name, k,i,j,i))
+							if (!strikeTower(name, k,i,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < 8-j; k++) {
+						n = new ChessTreeNode(*this);
+						if (!moveQueen(name, j,k,j,i))
+							if (!strikeTower(name, j,k,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < i; k++) {
+						n = new ChessTreeNode(*this);
+						if (!moveQueen(name, k,i,j,i))
+							if (!strikeTower(name, k,i,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					for (int k = 1; k < j; k++) {
+						n = new ChessTreeNode(*this);
+						if (!moveQueen(name, j,k,j,i))
+							if (!strikeTower(name, j,k,j,i))
+								return false;
+							else // true, cache good node
+								goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					}
+					if (!mode)	
+						route.push_back(*n);
+					if (!mode)
+						route.push_back(*n);
+					t.addNode(*n);
 					break;
-				}	
+				}
+				case 0:{
+						
+					break;
+				}		
 				default:
 					break;
 			}
@@ -324,6 +426,50 @@ bool Board::moveBishop(std::string& name, char r, char c, char oldr, char oldc)
 		switch (getBlackBoard()[r][c]) {
 			case 7:
 				moveBlackBishop(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+	}
+	return false;
+}
+				
+bool Board::moveQueen(std::string& name, char r, char c, char oldr, char oldc)
+{
+	if (name == playername) {
+		switch (getBlackBoard()[r][c]) {
+			case 7:
+				moveWhiteQueen(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+		switch (getWhiteBoard()[r][c]) {
+			case 7:
+				moveWhiteQueen(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+	} else if (name == blackplayername) {
+		switch (getWhiteBoard()[r][c]) {
+			case 7:
+				moveBlackQueen(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+		switch (getBlackBoard()[r][c]) {
+			case 7:
+				moveBlackQueen(r,c,oldr,oldc);	
 				return true;
 				break;	
 			default:
@@ -595,6 +741,26 @@ bool Board::strikeTower(std::string& name, char r, char c, char oldr, char oldc)
 }
 
 bool Board::strikeBishop(std::string& name, char r, char c, char oldr, char oldc)
+{
+	if (name == playername) { 
+		if (getBlackBoard()[r][c] != 7) {
+			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+				percentage >>= 2;
+				return true;		
+			}
+		}	
+	} else if (name == blackplayername) { 
+		if (getWhiteBoard()[r][c] != 7) {
+			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+				percentage >>= 2;
+				return true;		
+			}
+		}	
+	}
+	return false;
+}
+
+bool Board::strikeQueen(std::string& name, char r, char c, char oldr, char oldc)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {

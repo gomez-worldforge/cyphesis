@@ -60,6 +60,12 @@ public:
 	int moveWhiteTower(const int &r, const int& c, const int& oldr, const int& oldc);
 	int moveBlackTower(const int &r, const int& c, const int& old, const int& oldc);
 
+	int moveWhiteBishop(const int &r, const int& c, const int& oldr, const int& oldc);
+	int moveBlackBishop(const int &r, const int& c, const int& old, const int& oldc);
+
+	int moveWhiteQueen(const int &r, const int& c, const int& oldr, const int& oldc);
+	int moveBlackQueen(const int &r, const int& c, const int& old, const int& oldc);
+
 	inline char** getWhiteBoard() { return (char **)whiteboard; } 
 	inline char** getBlackBoard() { return (char **)blackboard; } 
 

@@ -58,6 +58,13 @@ public:
 	//bishops
 	bool moveBishop(std::string& name, char r, char c, char oldr, char oldc);
 	bool strikeBishop(std::string& name, char r, char c, char oldr, char oldc);
+	//queens
+	bool moveQueen(std::string& name, char r, char c, char oldr, char oldc);
+	bool strikeQueen(std::string& name, char r, char c, char oldr, char oldc);
+
+	//kings
+	bool moveKing(std::string& name, char r, char c, char oldr, char oldc);
+	bool strikeKing(std::string& name, char r, char c, char oldr, char oldc);
 
 	void setmode(int n) { mode = n; }	
 
