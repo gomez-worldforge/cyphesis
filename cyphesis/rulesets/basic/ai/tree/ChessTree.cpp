@@ -13,17 +13,12 @@ namespace chess
 
 int ChessTree::depth_first_search(ChessTreeNode& node)
 {
-	node.get().beginMove();	
-
+	node.get().makeMove(node.get().getPlayerName());	
+	node.get().makeMove(node.get().getNPCPlayerName());	
 	ChessTreeNode *n = new ChessTreeNode(board);	
 	
 	depth_first_search(n);
 }
-
-/*
-int ChessTree::breath_first_search(ChessTreeNode& node)
-{}
-*/
 
 int ChessTree::makeTree(const Board& current)
 {

@@ -47,7 +47,7 @@ public:
 	//note that the treenode is optional
 	void makeMove(std::string& name, const int& row, 
 			const int& col, const int& oldrow, const int& oldcol,
-			ChesstreeNode& t = ChessTreeNode());
+			ChesstreeNode& t);
 	//let the AI move based on a treenode
 	bool searchMove(std::string& name, ChessTreeNode& t);
 
@@ -94,7 +94,8 @@ private:
 
 public:	
 	Board& getBoard() { return (*this); }
-
+	std::string getPlayerName() { return playername; }
+	std::string getNPCPlayerName() { return blackplayername; }
 };
 
 }//namespace chess 

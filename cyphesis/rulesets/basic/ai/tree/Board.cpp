@@ -13,8 +13,9 @@ namespace chess
 {
 
 //make a move based on row and column
-void Board::makeMove(std::string& name, ChessTreeNode& t, const int& row, 
-			const int& col, const int& oldrow, const int& oldcol) {
+void Board::makeMove(std::string& name, const int& row, 
+			const int& col, const int& oldrow, const int& oldcol,
+			ChessTreeNode& t) {
 	if (playername == name) {
 		moveWhiteChessPiece(row,col,oldrow,oldcol);
 	} else if (blackplayername == name) {

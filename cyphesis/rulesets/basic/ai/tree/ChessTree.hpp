@@ -17,16 +17,16 @@ namespace chess
 class ChessTree : protected Tree<ChessTreeNode>
 {
 public:
-	explicit ChessTree() : root() { init(64); /*FIXME this is much higher sometimes */
-	}
+	explicit ChessTree() : root() { init(64); }
 	~ChessTree() {}
 
+	//make a tree for a move
 	int makeTree(const Board& current);
 	//prepare chessboard with pieces 
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
+	//main recursive algorithm
 	int depth_first_search(ChessTreeNode& node);
-	//int breath_first_search(ChessTreeNode& node);
 
 private:
 	ChessTreeNode root;
