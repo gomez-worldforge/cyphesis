@@ -1,5 +1,6 @@
 01 sep 2015:
-	. added a mode flag for altering tree search
+	. All moves and strikes done 
+	. added a mode flag for altering board search
 	. added full Pawn and Knight AI for 2 AI players
 	. FIXME add some extra constraints around percentage tests, losing speed
 

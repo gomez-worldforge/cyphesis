@@ -66,6 +66,9 @@ public:
 	int moveWhiteQueen(const int &r, const int& c, const int& oldr, const int& oldc);
 	int moveBlackQueen(const int &r, const int& c, const int& old, const int& oldc);
 
+	int moveWhiteKing(const int &r, const int& c, const int& oldr, const int& oldc);
+	int moveBlackKing(const int &r, const int& c, const int& old, const int& oldc);
+
 	inline char** getWhiteBoard() { return (char **)whiteboard; } 
 	inline char** getBlackBoard() { return (char **)blackboard; } 
 

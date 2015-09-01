@@ -250,13 +250,85 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					if (!mode)	
 						route.push_back(*n);
-					if (!mode)
-						route.push_back(*n);
 					t.addNode(*n);
 					break;
 				}
-				case 0:{
-						
+				case 0:{//king
+					ChessTreeNode *n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i-1,j,i))
+						if (!strikeKing(name, j-1,i-1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i,j,i))
+						if (!strikeKing(name, j-1,i,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i+1,j,i))
+						if (!strikeKing(name, j-1,i+1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j,i-1,j,i))
+						if (!strikeKing(name, j,i-1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j,i+1,j,i))
+						if (!strikeKing(name, j,i+1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i-1,j,i))
+						if (!strikeKing(name, j-1,i-1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i,j,i))
+						if (!strikeKing(name, j-1,i,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					n = new ChessTreeNode(*this);
+					if (!moveKing(name, j-1,i+1,j,i))
+						if (!strikeKing(name, j-1,i+1,j,i))
+							return false;
+						else // true, cache good node
+							goodnodes.push_back(*n);
+						t.addNode(*n);
+						if (mode > 0)
+							route.push_back(*n);
+					if (!mode)	
+						route.push_back(*n);
+					t.addNode(*n);
 					break;
 				}		
 				default:
@@ -480,6 +552,50 @@ bool Board::moveQueen(std::string& name, char r, char c, char oldr, char oldc)
 	return false;
 }
 				
+bool Board::moveKing(std::string& name, char r, char c, char oldr, char oldc)
+{
+	if (name == playername) {
+		switch (getBlackBoard()[r][c]) {
+			case 7:
+				moveWhiteKing(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+		switch (getWhiteBoard()[r][c]) {
+			case 7:
+				moveWhiteKing(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+	} else if (name == blackplayername) {
+		switch (getWhiteBoard()[r][c]) {
+			case 7:
+				moveBlackKing(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+		switch (getBlackBoard()[r][c]) {
+			case 7:
+				moveBlackKing(r,c,oldr,oldc);	
+				return true;
+				break;	
+			default:
+				return false;
+				break;	
+		}
+	}
+	return false;
+}
+
 bool Board::strikePawn(std::string& name, char r, char c)
 {
 
@@ -761,6 +877,26 @@ bool Board::strikeBishop(std::string& name, char r, char c, char oldr, char oldc
 }
 
 bool Board::strikeQueen(std::string& name, char r, char c, char oldr, char oldc)
+{
+	if (name == playername) { 
+		if (getBlackBoard()[r][c] != 7) {
+			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+				percentage >>= 2;
+				return true;		
+			}
+		}	
+	} else if (name == blackplayername) { 
+		if (getWhiteBoard()[r][c] != 7) {
+			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+				percentage >>= 2;
+				return true;		
+			}
+		}	
+	}
+	return false;
+}
+
+bool Board::strikeKing(std::string& name, char r, char c, char oldr, char oldc)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {
