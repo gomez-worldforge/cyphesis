@@ -1,4 +1,5 @@
 01 sep 2015:
+	. bugfix of old node test for == 7 (free position in function legalmove)
 	. All moves and strikes done 
 	. added a mode flag for altering board search
 	. added full Pawn and Knight AI for 2 AI players

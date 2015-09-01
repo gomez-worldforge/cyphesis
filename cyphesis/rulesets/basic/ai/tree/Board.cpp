@@ -88,7 +88,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 				if ((t.get().getWhiteBoardXY(i,j)) >> (getWhiteBoardXY(i,j)) == 0) 
 					continue;
 				else {
-					if ((t.get().getWhiteBoardXY(i,j)) == 7) { 
+					if ((getWhiteBoardXY(i,j)) == 7) { 
 						oldrow = i;
 						oldcol = j;
 					} else {
@@ -107,7 +107,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 				if ((t.get().getWhiteBoardXY(i,j)) >> (getWhiteBoardXY(i,j)) == 0) 
 					continue;
 				else {
-					if ((t.get().getWhiteBoardXY(i,j)) == 7) { 
+					if ((getWhiteBoardXY(i,j)) == 7) { 
 						oldrow = i;
 						oldcol = j;
 						return true;
@@ -128,7 +128,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 				if ((t.get().getBlackBoardXY(i,j)) >> (getBlackBoardXY(i,j)) == 0) 
 					continue;
 				else {
-					if ((t.get().getBlackBoardXY(i,j)) == 7) { 
+					if ((getBlackBoardXY(i,j)) == 7) { 
 						oldrow = i;
 						oldcol = j;
 					} else {
@@ -147,7 +147,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 				if ((t.get().getBlackBoardXY(i,j)) >> (getBlackBoardXY(i,j)) == 0) 
 					continue;
 				else {
-					if ((t.get().getBlackBoardXY(i,j)) == 7) { 
+					if ((getBlackBoardXY(i,j)) == 7) { 
 						oldrow = i;
 						oldcol = j;
 						return true;
