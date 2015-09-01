@@ -11,26 +11,27 @@ namespace tree
 namespace chess 
 {
 
-int ChessTree::depth_first_search()
+int ChessTree::depth_first_search(ChessTreeNode& node)
 {
+	node.get().beginMove();	
+
+	ChessTreeNode *n = new ChessTreeNode(board);	
 	
+	depth_first_search(n);
 }
 
-int ChessTree::breath_first_search()
+/*
+int ChessTree::breath_first_search(ChessTreeNode& node)
 {}
+*/
 
 int ChessTree::makeTree(const Board& current)
 {
 
 	set(const_cast<Board&>(current));
+	root = current;
 
-//////	moveOnBoard(this);
-/***
-	for (int i = 0; i < height; i++) {
-		for (int i = 0; i < width; i++) {
-		}}		
-***/
-
+	depth_first_search(root);		
 }
 
 

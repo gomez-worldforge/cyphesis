@@ -12,9 +12,42 @@ namespace tree
 namespace chess 
 {
 
-bool Board::beginMove(std::string& name, ChessTreeNode& t) {
+//make a move based on row and column
+void Board::makeMove(std::string& name, ChessTreeNode& t, const int& row, 
+			const int& col, const int& oldrow, const int& oldcol) {
+	if (playername == name) {
+		moveWhiteChessPiece(row,col,oldrow,oldcol);
+	} else if (blackplayername == name) {
+		moveBlackChessPiece(row,col,oldrow,oldcol);
+	}
+}
+
+//let the AI move based on a treenode
+bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 	if (playername == name) {
 		move(name, t);
+		
+		if (goodnodes.empty()) {//we did not strike a chess piece	
+			if (route.empty())
+				return false;
+			else {
+				
+			}
+		} else {//we stroke a chess piece
+			for (ChessNodesIter vi = route.begin();
+					vi != route.end();
+					vi++) {
+				int row = 0, col = 0, oldrow = 0, oldcol = 0;
+				if (!legalmove(goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+					return false;
+				else {
+					moveWhiteChessPiece(row,col,oldrow,oldcol);
+					percentage = 1;
+					return true;		
+				}
+			}
+		//percentage = 1;
+		}
 	} else if (blackplayername == name) {
 		move(name, t);
 		

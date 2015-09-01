@@ -17,7 +17,7 @@ namespace chess
 class ChessTree : protected Tree<ChessTreeNode>
 {
 public:
-	explicit ChessTree() { init(64); /*FIXME this is much higher sometimes */
+	explicit ChessTree() : root() { init(64); /*FIXME this is much higher sometimes */
 	}
 	~ChessTree() {}
 
@@ -25,10 +25,11 @@ public:
 	//prepare chessboard with pieces 
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
-	int depth_first_search();
-	int breath_first_search();
-protected:
+	int depth_first_search(ChessTreeNode& node);
+	//int breath_first_search(ChessTreeNode& node);
+
 private:
+	ChessTreeNode root;
 };
 
 }//namespace chess 

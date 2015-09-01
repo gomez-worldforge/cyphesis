@@ -43,10 +43,21 @@ public:
 		{}
 	~Board() {}
 
-	bool beginMove(std::string& name, ChessTreeNode& t);
+	//make a move based on row and column
+	//note that the treenode is optional
+	void makeMove(std::string& name, const int& row, 
+			const int& col, const int& oldrow, const int& oldcol,
+			ChesstreeNode& t = ChessTreeNode());
+	//let the AI move based on a treenode
+	bool searchMove(std::string& name, ChessTreeNode& t);
 
-	bool legalmove(ChessTreeNode& t, int& row, int& col, int& oldrow, int& oldcol);
+	//test if the move has been done
+	bool legalmove(ChessTreeNode& t, int& row, int& col, 
+			int& oldrow, int& oldcol);
+	//list based search on best single move
 	bool move(std::string& name, ChessTreeNode& t);
+
+	//AI moves of chess pieces
 	//pawns
 	bool movePawn(std::string& name, char r, char c);
 	bool strikePawn(std::string& name, char r, char c);
@@ -67,6 +78,9 @@ public:
 	bool moveKing(std::string& name, char r, char c, char oldr, char oldc);
 	bool strikeKing(std::string& name, char r, char c, char oldr, char oldc);
 
+	//mode set for play
+	//mode 0 is for best play, higher and lower change the list search
+	//in the function searchMove (see above)
 	void setmode(int n) { mode = n; }	
 
 private:
@@ -78,7 +92,9 @@ private:
 	ChessTreeNodes goodnodes;
 	ChessTreeNodes route;
 
-	
+public:	
+	Board& getBoard() { return (*this); }
+
 };
 
 }//namespace chess 

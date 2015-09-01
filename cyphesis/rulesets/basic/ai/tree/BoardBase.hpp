@@ -78,7 +78,16 @@ public:
 private:
 	char whiteboard[8][8];
 	char blackboard[8][8];
-	
+
+public:
+	Board operator=(Board& b) { 
+		if (b == *this)
+			return *this;
+
+		//FIXME deep copy whiteboard and blackboard
+
+	}
+
 };
 
 }//namespace chess 
