@@ -89,6 +89,7 @@ public:
 		//	return *this;
 		
 		std::memcpy((char **)(this->whiteboard), (char **)(b.whiteboard), 64);
+		std::memcpy((char **)(this->blackboard), (char **)(b.blackboard), 64);
 	}
 
 };

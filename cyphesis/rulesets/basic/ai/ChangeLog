@@ -1,4 +1,5 @@
 02 sep 2015:
+	. bugfix: no more moving over other chess pieces 
 	. bugfix: move system was broken for breadth first search node building 
 	. bugfix: black starts at the bottom of its own board and white starts
 	  at the top of its own board 
