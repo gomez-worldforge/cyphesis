@@ -7,6 +7,8 @@
  */
 #include "ChessRam.hpp"
 
+#include <cstring>
+
 namespace utilai
 {
 namespace tree 
@@ -83,11 +85,10 @@ private:
 
 public:
 	BoardBase operator=(BoardBase& b) { 
-		/*if (b == *this)
-			return *this;
-		*/
-		//FIXME deep copy whiteboard and blackboard
-
+		//if (&b == this)
+		//	return *this;
+		
+		std::memcpy((char **)(this->whiteboard), (char **)(b.whiteboard), 64);
 	}
 
 };

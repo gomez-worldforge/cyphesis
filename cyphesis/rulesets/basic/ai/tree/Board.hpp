@@ -123,8 +123,7 @@ public:
 		/*if (b == *this)
 			return *this;
 		*/
-		//FIXME deep copy of BoardBase	
-
+		static_cast<BoardBase&>(*this) = static_cast<BoardBase&>(b);
 	}
 };
 

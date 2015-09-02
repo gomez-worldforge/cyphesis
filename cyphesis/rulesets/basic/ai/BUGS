@@ -1,2 +1,2 @@
-. white must move to the bottom of the row column system, black the
-other direction 
+. the knight returns the first strike it does, it does not 'think' further on
+. the tree needs to build for now there's only a best-first strike and that's it

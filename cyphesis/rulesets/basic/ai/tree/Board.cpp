@@ -32,9 +32,15 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 			if (route.empty())
 				return false;
 			else {
-				
+				//route is not empty so we made a single move
+				//unless nothing can move anymore
+				return false;//FIXME search for a good strike
+						//node further on in the tree
 			}
-		} else {//we stroke a chess piece
+		} else {
+			//we stroke a chess piece so we do that move
+			//FIXME search for a better thing than striking
+			//further on in the tree
 			for (ChessTreeNodesIter vi = route.begin();
 					vi != route.end();
 					vi++) {
@@ -179,7 +185,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						goodnodes.push_back(*n);
 						route.push_back(*n);
 						t.addNode(*n);
-					} else if (movePawn(name, j,i)) {
+					} if (movePawn(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						route.push_back(*n);
 						t.addNode(*n);
@@ -187,14 +193,12 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 4:{//knight	
-					//ChessTreeNode *n = new ChessTreeNode(*this);
-					//FIXME move to all positions with knight
 					if (strikeKnight(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						goodnodes.push_back(*n);
 						route.push_back(*n);
 						t.addNode(*n);
-					} else if (moveKnight(name, j,i)) {
+					} if (moveKnight(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						route.push_back(*n);
 						t.addNode(*n);
@@ -210,7 +214,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -226,7 +230,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -241,7 +245,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -256,7 +260,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -278,7 +282,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, k,i,j,i)) {
+						} if (moveBishop(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -295,7 +299,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, j,k,j,i)) {
+						} if (moveBishop(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -312,7 +316,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, k,i,j,i)) {
+						} if (moveBishop(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -329,7 +333,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, j,k,j,i)) {
+						} if (moveBishop(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -352,7 +356,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -369,7 +373,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, j,k,j,i)) {
+						} if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -386,7 +390,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -403,7 +407,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, j,k,j,i)) {
+						} if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -418,7 +422,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -434,7 +438,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -449,7 +453,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -464,7 +468,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -598,7 +602,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						goodnodes.push_back(*n);
 						route.push_back(*n);
 						t.addNode(*n);
-					} else if (movePawn(name, j,i)) {
+					} if (movePawn(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						route.push_back(*n);
 						t.addNode(*n);
@@ -606,14 +610,12 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 4:{//knight	
-					//ChessTreeNode *n = new ChessTreeNode(*this);
-					//FIXME move to all positions with knight
 					if (strikeKnight(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						goodnodes.push_back(*n);
 						route.push_back(*n);
 						t.addNode(*n);
-					} else if (moveKnight(name, j,i)) {
+					} if (moveKnight(name, j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						route.push_back(*n);
 						t.addNode(*n);
@@ -629,7 +631,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -645,7 +647,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -660,7 +662,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -675,7 +677,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -697,7 +699,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, k,i,j,i)) {
+						} if (moveBishop(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -714,7 +716,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, j,k,j,i)) {
+						} if (moveBishop(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -731,7 +733,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, k,i,j,i)) {
+						} if (moveBishop(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -748,7 +750,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveBishop(name, j,k,j,i)) {
+						} if (moveBishop(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -771,7 +773,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -788,7 +790,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, j,k,j,i)) {
+						} if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -805,7 +807,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -822,7 +824,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, j,k,j,i)) {
+						} if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -837,7 +839,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -853,7 +855,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -868,7 +870,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -883,7 +885,7 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} else if (moveQueen(name, k,i,j,i)) {
+						} if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -1358,7 +1360,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 		} else if (r != 0) {
 			switch (getWhiteBoard()[r-1][c-1]) {//we are not a queen	
 			case 7:
-				switch (getWhiteBoard()[r-1][c+1]) {//FIXME alreayd in movePawn go to free position 
+				switch (getWhiteBoard()[r-1][c+1]) {//go to free position 
 				case 7:
 					return false;
 				default:
