@@ -49,13 +49,13 @@ class Board : protected Grid, BoardBase
 public:
 	Board(const std::string player, const std::string blackplayer) 
 		: Grid(),BoardBase(),width(8),height(8),percentage(1),
-		  mode(0),
+		  mode(10),
 		  playername(const_cast<std::string&>(player)), 
 		  blackplayername(const_cast<std::string&>(blackplayer)) 
 		{}
 	Board() 
 		: Grid(),BoardBase(),width(8),height(8),percentage(1),
-		  mode(0),
+		  mode(10),
 		  playername("White"), 
 		  blackplayername("Black") 
 
