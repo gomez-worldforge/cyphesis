@@ -21,34 +21,36 @@ public:
 	~BoardBase() {}
 
 	//initialize chess board
+	//white is at the top, black at the bottom
+	//there is a board for each color
 	void startGame() {
 		//pawns
 		for (int i = 0; i < 8; i++) { 
 			whiteboard[1][i] = 5;
-			blackboard[1][i] = 5;
+			blackboard[6][i] = 5;
 		}
 
 		//towers
 		whiteboard[0][0] = 3;	
 		whiteboard[0][7] = 3;	
-		blackboard[0][0] = 3;	
-		blackboard[0][7] = 3;	
+		blackboard[7][0] = 3;	
+		blackboard[7][7] = 3;	
 		//knights
 		whiteboard[0][1] = 4;	
 		whiteboard[0][6] = 4;	
-		blackboard[0][1] = 4;	
-		blackboard[0][6] = 4;	
+		blackboard[7][1] = 4;	
+		blackboard[7][6] = 4;	
 		//bishops
 		whiteboard[0][2] = 2;	
 		whiteboard[0][5] = 2;	
-		blackboard[0][2] = 2;	
-		blackboard[0][5] = 2;	
+		blackboard[7][2] = 2;	
+		blackboard[7][5] = 2;	
 		//queen
 		whiteboard[0][4] = 1;	
-		blackboard[0][4] = 1;	
+		blackboard[7][4] = 1;	
 		//kings
 		whiteboard[0][3] = 0;	
-		blackboard[0][3] = 0;	
+		blackboard[7][3] = 0;	
 	} 
 
 	int moveWhiteChessPiece(const int &r, const int& c, const int & oldr, const int& oldc);

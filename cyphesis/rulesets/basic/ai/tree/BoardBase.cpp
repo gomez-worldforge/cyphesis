@@ -11,15 +11,17 @@ namespace tree
 namespace chess 
 {
 
-//NOTE pawns move 1 forward whereas the rest moves acoording to
-//r and c
+//NOTE pawns move 1 forward whereas the rest moves acording to
+//r (row) and c (column)
+//the whte pawn moves down
 int BoardBase::moveWhitePawn(const int &r, const int& c) {
 	whiteboard[r+1][c] = whiteboard[r][c];
 	whiteboard[r][c] = 7;
 }	
 
+//the black pawn moves up
 int BoardBase::moveBlackPawn(const int &r, const int& c) {
-	blackboard[r+1][c] = blackboard[r][c];
+	blackboard[r-1][c] = blackboard[r][c];
 	blackboard[r][c] = 7; 
 }	
 

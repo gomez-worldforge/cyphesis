@@ -168,337 +168,873 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 
 bool Board::move(std::string& name, ChessTreeNode& t)
 {
+	if (name == playername) {
 	for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
-	
+			//choose white chess pieces
 			switch(getWhiteBoard()[j][i]) {
 				case 5:{//pawn
-					ChessTreeNode *n = new ChessTreeNode(*this);
-					if (!movePawn(name, j,i))
-						if (!strikePawn(name, j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
-					route.push_back(*n);
-					t.addNode(*n);
-					return true;
+					if (strikePawn(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						route.push_back(*n);
+						t.addNode(*n);
+					} else if (movePawn(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						route.push_back(*n);
+						t.addNode(*n);
+					}
 					break;
 				}
 				case 4:{//knight	
-					ChessTreeNode *n = new ChessTreeNode(*this);
-					if (!moveKnight(name, j,i))
-						if (!strikeKnight(name, j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
-					route.push_back(*n);
-					t.addNode(*n);
+					//ChessTreeNode *n = new ChessTreeNode(*this);
+					//FIXME move to all positions with knight
+					if (strikeKnight(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						route.push_back(*n);
+						t.addNode(*n);
+					} else if (moveKnight(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						route.push_back(*n);
+						t.addNode(*n);
+					}
 					
 					break;
 				}	
 				case 3:{//tower				
-					ChessTreeNode *n = new ChessTreeNode(*this);
 					for (int k = 1; k < 8-i; k++) {
-						if (!moveTower(name, k,i,j,i))
-							if (!strikeTower(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+
 					}
 					for (int k = 1; k < 8-j; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveTower(name, j,k,j,i))
-							if (!strikeTower(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < i; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveTower(name, k,i,j,i))
-							if (!strikeTower(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < j; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveTower(name, j,k,j,i))
-							if (!strikeTower(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
-					if (!mode)	
-						route.push_back(*n);
+					//if (!mode)	
+					//	route.push_back(*n);
 					break;
 				}	
 				case 2:{//bishop									
-					ChessTreeNode *n = new ChessTreeNode(*this);
 					for (int k = 1; k < 8-i; k++) {
 						if (i != j)
 							continue;
-						if (!moveBishop(name, k,i,j,i))
-							if (!strikeBishop(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < 8-j; k++) {
 						if (i != j)
 							continue;
-						if (!moveBishop(name, j,k,j,i))
-							if (!strikeBishop(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < i; k++) {
 						if (i != j)
 							continue;
-						if (!moveBishop(name, k,i,j,i))
-							if (!strikeBishop(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < j; k++) {
 						if (i != j)
 							continue;
-						if (!moveBishop(name, j,k,j,i))
-							if (!strikeBishop(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
-					if (!mode)
-						route.push_back(*n);
-					t.addNode(*n);
+					//if (!mode)
+					//	route.push_back(*n);
+					//t.addNode(*n);
 					break;
 				}	
 				case 1:{//queen
-					ChessTreeNode *n = new ChessTreeNode(*this);
 					for (int k = 1; k < 8-i; k++) {
 						if (i != j)
 							continue;
-						if (!moveQueen(name, k,i,j,i))
-							if (!strikeBishop(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < 8-j; k++) {
 						if (i != j)
 							continue;
-						if (!moveQueen(name, j,k,j,i))
-							if (!strikeBishop(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < i; k++) {
 						if (i != j)
 							continue;
-						if (!moveQueen(name, k,i,j,i))
-							if (!strikeBishop(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < j; k++) {
 						if (i != j)
 							continue;
-						if (!moveQueen(name, j,k,j,i))
-							if (!strikeBishop(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
-					n = new ChessTreeNode(*this);
 					for (int k = 1; k < 8-i; k++) {
-						if (!moveQueen(name, k,i,j,i))
-							if (!strikeTower(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+
 					}
 					for (int k = 1; k < 8-j; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveQueen(name, j,k,j,i))
-							if (!strikeTower(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < i; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveQueen(name, k,i,j,i))
-							if (!strikeTower(name, k,i,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
 					for (int k = 1; k < j; k++) {
-						n = new ChessTreeNode(*this);
-						if (!moveQueen(name, j,k,j,i))
-							if (!strikeTower(name, j,k,j,i))
-								return false;
-							else // true, cache good node
-								goodnodes.push_back(*n);
-						t.addNode(*n);
-						if (mode > 0)
-							route.push_back(*n);
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
 					}
-					if (!mode)	
-						route.push_back(*n);
-					t.addNode(*n);
+					//if (!mode)
+					//	route.push_back(*n);
 					break;
 				}
 				case 0:{//king
-					ChessTreeNode *n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i-1,j,i))
-						if (!strikeKing(name, j-1,i-1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
-						t.addNode(*n);
+					if (strikeKing(name, j-1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i,j,i))
-						if (!strikeKing(name, j-1,i,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i+1,j,i))
-						if (!strikeKing(name, j-1,i+1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (strikeKing(name, j-1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j,i-1,j,i))
-						if (!strikeKing(name, j,i-1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j,i+1,j,i))
-						if (!strikeKing(name, j,i+1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (strikeKing(name, j-1,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i-1,j,i))
-						if (!strikeKing(name, j-1,i-1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i,j,i))
-						if (!strikeKing(name, j-1,i,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (strikeKing(name, j,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					n = new ChessTreeNode(*this);
-					if (!moveKing(name, j-1,i+1,j,i))
-						if (!strikeKing(name, j-1,i+1,j,i))
-							return false;
-						else // true, cache good node
-							goodnodes.push_back(*n);
 						t.addNode(*n);
+					}
+					if (moveKing(name, j,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
 						if (mode > 0)
 							route.push_back(*n);
-					if (!mode)	
-						route.push_back(*n);
-					t.addNode(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j+1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j+1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j+1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j+1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
 					break;
-				}		
+				}	
+				case 7:{
+					//empty position
+					break;
+				}	
 				default:
 					break;
 			}
 	
 		}
 	}
+	} else if (name == blackplayername) {
+
+	for (int j = 0; j < height; j++) {
+		for (int i = 0; i < width; i++) {
+			switch(getBlackBoard()[j][i]) {
+				case 5:{//pawn
+					if (strikePawn(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						route.push_back(*n);
+						t.addNode(*n);
+					} else if (movePawn(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						route.push_back(*n);
+						t.addNode(*n);
+					}
+					break;
+				}
+				case 4:{//knight	
+					//ChessTreeNode *n = new ChessTreeNode(*this);
+					//FIXME move to all positions with knight
+					if (strikeKnight(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						route.push_back(*n);
+						t.addNode(*n);
+					} else if (moveKnight(name, j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						route.push_back(*n);
+						t.addNode(*n);
+					}
+					
+					break;
+				}	
+				case 3:{//tower				
+					for (int k = 1; k < 8-i; k++) {
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+
+					}
+					for (int k = 1; k < 8-j; k++) {
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < i; k++) {
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < j; k++) {
+						if (strikeTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveTower(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					//if (!mode)	
+					//	route.push_back(*n);
+					break;
+				}	
+				case 2:{//bishop									
+					for (int k = 1; k < 8-i; k++) {
+						if (i != j)
+							continue;
+						if (strikeBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < 8-j; k++) {
+						if (i != j)
+							continue;
+						if (strikeBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < i; k++) {
+						if (i != j)
+							continue;
+						if (strikeBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < j; k++) {
+						if (i != j)
+							continue;
+						if (strikeBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveBishop(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					//t.addNode(*n);
+					break;
+				}	
+				case 1:{//queen
+					for (int k = 1; k < 8-i; k++) {
+						if (i != j)
+							continue;
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < 8-j; k++) {
+						if (i != j)
+							continue;
+						if (strikeQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < i; k++) {
+						if (i != j)
+							continue;
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < j; k++) {
+						if (i != j)
+							continue;
+						if (strikeQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, j,k,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < 8-i; k++) {
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+
+					}
+					for (int k = 1; k < 8-j; k++) {
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < i; k++) {
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					for (int k = 1; k < j; k++) {
+						if (strikeQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							goodnodes.push_back(*n);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+						} else if (moveQueen(name, k,i,j,i)) {
+							ChessTreeNode *n = new ChessTreeNode(*this);
+							if (mode > 0)
+								route.push_back(*n);
+							t.addNode(*n);
+							
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					break;
+				}
+				case 0:{//king
+					if (strikeKing(name, j-1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j-1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j-1,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j-1,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j,i+1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j+1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j+1,i-1,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (strikeKing(name, j+1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					if (moveKing(name, j+1,i,j,i)) {
+						ChessTreeNode *n = new ChessTreeNode(*this);
+						goodnodes.push_back(*n);
+						if (mode > 0)
+							route.push_back(*n);
+						t.addNode(*n);
+					}
+					break;
+				}	
+				case 7:{
+					//empty position
+					break;
+				}	
+				default:
+					break;
+			}
+			//choose black chess pieces	
+		}
+	}
+	}
 }
 
 bool Board::movePawn(std::string& name, char r, char c)
 {
-	if (r == 7)
-		return false;
 	if (name == playername) {
+		//pawn will now becomes a queen if it is not blocked
+		if (r == 6 && getWhiteBoard()[r+1][c] == 7) {
+			moveWhitePawn(r,c);
+			getWhiteBoard()[r+1][c] = 1;//set to queen	
+			return true;
+		}
+			
 		//go to free position
 		if (getWhiteBoard()[r+1][c] == 7 && getBlackBoard()[r+1][c] == 7) {
 			moveWhitePawn(r,c);	
 			return true;
 		}
 		return false;
-	} else if (name == blackplayername) { 
+	} else if (name == blackplayername) {
+		//will we move to the last row (upper row for black) 
+		if (r == 1 && getWhiteBoard()[r-1][c] == 7) {
+			moveBlackPawn(r,c);
+			getBlackBoard()[r-1][c] = 1;//set to queen	
+			return true;
+		}
+			
 		//go to free position
-		if (getBlackBoard()[r+1][c] == 7 && getWhiteBoard()[r+1][c]) { 
+		if (getBlackBoard()[r-1][c] == 7 && getWhiteBoard()[r-1][c] == 7) { 
 			moveBlackPawn(r,c);	
 			return true;
 		}
@@ -796,11 +1332,11 @@ bool Board::strikePawn(std::string& name, char r, char c)
 		}
 	} else if (blackplayername == name) {
 		if (c == 7) {
-			switch (getWhiteBoard()[r+1][c-1]) {
+			switch (getWhiteBoard()[r-1][c-1]) {
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c-1])) > percentage) {
+				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;			
 				} else {
@@ -808,25 +1344,25 @@ bool Board::strikePawn(std::string& name, char r, char c)
 				}
 			}
 		} else if (c == 0) {//we are a pawn on the side
-			switch (getWhiteBoard()[r+1][c+1]) {//go to nothing	
+			switch (getWhiteBoard()[r-1][c+1]) {//go to nothing	
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c+1])) > percentage) {
+				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {
 					return false;
 				}
 			}
-		} else if (r != 7) {
-			switch (getWhiteBoard()[r+1][c-1]) {//we are not a queen	
+		} else if (r != 0) {
+			switch (getWhiteBoard()[r-1][c-1]) {//we are not a queen	
 			case 7:
-				switch (getWhiteBoard()[r+1][c+1]) {//go to nothing	
+				switch (getWhiteBoard()[r-1][c+1]) {//FIXME alreayd in movePawn go to free position 
 				case 7:
 					return false;
 				default:
-					if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c+1])) > percentage) {
+					if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
 						percentage >>= 2;
 						return true;
 					} else {
@@ -834,7 +1370,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 					}
 				}
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c-1])) > percentage) {
+				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {

@@ -1,5 +1,11 @@
+02 sep 2015:
+	. bugfix: move system was broken for breadth first search node building 
+	. bugfix: black starts at the bottom of its own board and white starts
+	  at the top of its own board 
+	. pawn becomes a queen when at last row
 01 sep 2015:
-	. bugfix of old node test for == 7 (free position in function legalmove)
+	. bugfix: of old node test for == 7 
+	  (free position in function legalmove)
 	. All moves and strikes done 
 	. added a mode flag for altering board search
 	. added full Pawn and Knight AI for 2 AI players

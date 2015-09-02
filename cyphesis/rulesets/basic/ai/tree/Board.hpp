@@ -4,6 +4,25 @@
 #define _BOARD_UTILAI_H_
 
 /*
+ * NOTE
+ * 
+ * Board contains both a black and white playing board (in ChessRam.hpp)
+ * It contains the breadth of the breadth search algorithm (in ChessTree.hpp)
+ * The move function dispatches a player name and stores them in playername
+ * for white and blackplayername for black.
+ * Each time a breadth first search move gets calculated the move looks at
+ * the white or black playing board and builds member nodes of the ChessTreeNode
+ * parameter. Both players can be an AI (NPC) or a Person (PC). The code
+ * is somewhat towards a black AI player and a white player as a person.
+ * 
+ * There's a threshold (called percentage) which gains more entropy when you
+ * make a good strike e.g. a pawn striking a knight. This can be changed if
+ * you like.
+ *
+ * Each time you strike you gain a good node (goodnodes list variable),
+ *
+ * There also is a mode flag which alters the route search for optimization. 
+ *
  */
 
 #include "Grid.hpp"
