@@ -24,6 +24,7 @@ void Board::makeMove(std::string& name, const int& row,
 }
 
 //let the AI move based on a treenode
+//pass-by-reference on the position
 bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 			int& oldrow, int& oldcol) {
 	if (playername == name) {
@@ -44,7 +45,7 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 					vi++) {
 					//int row = 0, col = 0, oldrow = 0, oldcol = 0;
 					if (!legalmove(playername, (*vi),row,col,oldrow,oldcol))
-						return false;
+						continue;//return false;
 					else {
 						moveWhiteChessPiece(row,col,oldrow,oldcol);
 						percentage = 1;
@@ -57,13 +58,16 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 			}
 		} else {
 			//we stroke a chess piece so we do that move
-			//FIXME search for a better thing than striking
-			//further on in the tree
-			//int row = 0, col = 0, oldrow = 0, oldcol = 0;
+			//NOTE 03 sept 2015 :
+			//the last goodnode is best as it beats higher
+			//percentages
 			if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+				//FIXME better algorithm
+				goodnodes.clear();
 				return false;
 			else {
 				moveWhiteChessPiece(row,col,oldrow,oldcol);
+				goodnodes.clear();
 				percentage = 1;
 				return true;		
 			}
@@ -82,7 +86,7 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 					vi++) {
 					//int row = 0, col = 0, oldrow = 0, oldcol = 0;
 					if (!legalmove(playername, (*vi),row,col,oldrow,oldcol))
-						return false;
+						continue;//return false;
 					else {
 						moveBlackChessPiece(row,col,oldrow,oldcol);
 						percentage = 1;

@@ -22,7 +22,7 @@
 
 static void ChessNPC_dealloc(PyChessNPC *self)
 {
-    self->chesstree->~ChessTree();
+    self->chesstree.~ChessTree();
     self->ob_type->tp_free(self);
 }
 
@@ -34,7 +34,7 @@ static int ChessNPC_init(PyChessNPC * self, PyObject * args, PyObject * kwds)
         return -1;
     }
 
-    self->chesstree = new utilai::tree::chess::ChessTree();
+    self->chesstree = utilai::tree::chess::ChessTree();
 
     return 0;
 }
@@ -47,13 +47,25 @@ static int ChessNPC_start_game(PyChessNPC * self, PyObject * args, PyObject * kw
         return -1;
     }
 
-    self->chesstree->startGame();
+    self->chesstree.startGame();
     return 1;
 }
 
-static int ChessNPC_think(PyChessNPC * self, PyObject * args, PyObject * kwds)
+//build a new tree based on the current board stored in self->chesstree
+static int ChessNPC_build_tree(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
-    return 1;
+    	self->chesstree.buildTree();
+	
+	return 1;
+}
+
+//build a tree based on a Board parameter
+static int ChessNPC_build_tree_with_board(PyChessNPC * self, PyObject * args, PyObject * kwds)
+{
+	/*FIXME python args board parameter*/
+    	self->chesstree.buildTreeWithBoard(self->chesstree.get());
+	
+	return 1;
 }
 
 static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
@@ -64,14 +76,14 @@ static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
     if (self != NULL) {
         //if (PyInt_Check(i) && PyInt_Check(h) && PyInt_Check(o)) {
     	new (&(self->chesstree)) utilai::tree::chess::ChessTree();
-       // new (&(self->chesstree)) utilai::tree::chess::ChessTree();
     }
     return (PyObject *)self;
 }
 
 static PyMethodDef ChessNPC_methods[] = {
     {"startgame",             (PyCFunction)ChessNPC_start_game,      METH_O},
-    {"think",             (PyCFunction)ChessNPC_think,      METH_O},
+    {"buildtree",             (PyCFunction)ChessNPC_build_tree,      METH_O},
+    {"buildtreewithboard",             (PyCFunction)ChessNPC_build_tree_with_board,      METH_O},
     {NULL,              NULL}           /* sentinel */
 };
 

@@ -24,7 +24,8 @@ public:
 	~ChessTree() {}
 
 	//make a tree for a move
-	bool buildTree(const Board& current);
+	bool buildTree();
+	bool buildTreeWithBoard(const Board& b);
 	//prepare chessboard with pieces 
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
@@ -50,6 +51,16 @@ private:
 	//(row,col,oldrow,oldcol.) This is how moves that have been searched
 	//for are cached. It is filled starting with a one color after the other
 	std::vector<int> positions;	
+
+public:
+	ChessTree& operator=(ChessTree t) {
+		/*if (*this == t) return (*this);*/
+
+		this->root = t.root;
+		this->positions = t.positions;
+		return (*this);
+	}
+
 };
 
 }//namespace chess 

@@ -29,7 +29,7 @@
 ///
 typedef struct {
     PyObject_HEAD
-    utilai::tree::chess::ChessTree *chesstree;
+    utilai::tree::chess::ChessTree chesstree;
 } PyChessNPC;
 
 extern PyTypeObject PyChessNPC_Type;

@@ -56,10 +56,22 @@ bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
 //these are needed to make moves, the default constructor
 //of Board has "White" and "Black" as the names of the 
 //two players.
-bool ChessTree::buildTree(const Board& current)
+bool ChessTree::buildTreeWithBoard(const Board& b)
 {
 
-	set(const_cast<Board&>(current));
+	set(const_cast<Board&>(b));
+	root = *this;
+
+	//FIXME needs a timer and signal
+	breadthFirstSearch(root);
+
+	return true;
+}
+
+//build a tree with the current board
+bool ChessTree::buildTree()
+{
+
 	root = *this;
 
 	//FIXME needs a timer and signal
