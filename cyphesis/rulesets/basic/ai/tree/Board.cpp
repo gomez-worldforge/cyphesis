@@ -231,8 +231,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					
 					break;
 				}	
-				case 3:{//tower				
-					for (int k = 1; k < 8-i; k++) {
+				case 3:{//tower			
+					//move right	
+					for (int k = i; k < 8; k++) {
 
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
@@ -252,17 +253,18 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						}
 
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+					//move down 
+					for (int k = j+1; k < 8; k++) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
 							break;
 
-						if (strikeTower(name, k,i,j,i)) {
+						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							goodnodes.push_back(*n);
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -270,17 +272,18 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
-						if (strikeTower(name, k,i,j,i)) {
+						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							goodnodes.push_back(*n);
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -288,7 +291,8 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < j; k++) {
+					//move up	
+					for (int k = j; k >= 0; k--) {
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -310,85 +314,97 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					//	route.push_back(*n);
 					break;
 				}	
-				case 2:{//bishop									
-					for (int k = 1; k < 8-i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+				case 2:{//bishop
+					//move bottom right	
+					for (int k = j; k < 8; k++) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
 
-						if (strikeBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (strikeBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+	
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+								
+							}
 						}
 					}
-					for (int k = 1; k < j; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (strikeBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
 					//if (!mode)
@@ -397,9 +413,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}	
 				case 1:{//queen
-					for (int k = 1; k < 8-i; k++) {
-						if (i != j)
-							continue;
+					//move right	
+					for (int k = i; k < 8; k++) {
+
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -416,10 +432,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							t.addNode(*n);
 							
 						}
+
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (i != j)
-							continue;
+					//move down 
+					for (int k = j+1; k < 8; k++) {
 						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
 							break;
 
@@ -437,30 +453,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
-						}
-					}
-					for (int k = 1; k < j; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
@@ -477,26 +472,8 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < 8-i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
-						}
-
-					}
-					for (int k = 1; k < 8-j; k++) {
+					//move up	
+					for (int k = j; k >= 0; k--) {
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -514,42 +491,100 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+					//move bottom right	
+					for (int k = j; k < 8; k++) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
 
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < j; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+	
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+								
+							}
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							
+							}
+						}
+					}
+					//if (!mode)	
+					//	route.push_back(*n);
 					//if (!mode)
 					//	route.push_back(*n);
 					break;
@@ -698,7 +733,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}	
 				case 3:{//tower				
-					for (int k = 1; k < 8-i; k++) {
+					//move right	
+					for (int k = i; k < 8; k++) {
+
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -717,17 +754,18 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						}
 
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+					//move down 
+					for (int k = j+1; k < 8; k++) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
 							break;
 
-						if (strikeTower(name, k,i,j,i)) {
+						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							goodnodes.push_back(*n);
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -735,17 +773,18 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
-						if (strikeTower(name, k,i,j,i)) {
+						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							goodnodes.push_back(*n);
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -753,7 +792,8 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < j; k++) {
+					//move up	
+					for (int k = j; k >= 0; k--) {
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -773,87 +813,101 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//if (!mode)	
 					//	route.push_back(*n);
+					//if (!mode)	
+					//	route.push_back(*n);
 					break;
 				}	
-				case 2:{//bishop									
-					for (int k = 1; k < 8-i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+				case 2:{//bishop
+					//move bottom right	
+					for (int k = j; k < 8; k++) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
 
-						if (strikeBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (i != j)
-							continue;
-						if (strikeBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+	
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+								
+							}
 						}
 					}
-					for (int k = 1; k < j; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (strikeBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveBishop(name, j,k,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveBishop(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
 					//if (!mode)
@@ -862,9 +916,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}	
 				case 1:{//queen
-					for (int k = 1; k < 8-i; k++) {
-						if (i != j)
-							continue;
+					//move right	
+					for (int k = i; k < 8; k++) {
+
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -881,10 +935,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							t.addNode(*n);
 							
 						}
+
 					}
-					for (int k = 1; k < 8-j; k++) {
-						if (i != j)
-							continue;
+					//move down 
+					for (int k = j+1; k < 8; k++) {
 						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
 							break;
 
@@ -902,30 +956,9 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
-						}
-					}
-					for (int k = 1; k < j; k++) {
-						if (i != j)
-							continue;
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
@@ -942,26 +975,8 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < 8-i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
-
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-							
-						}
-
-					}
-					for (int k = 1; k < 8-j; k++) {
+					//move up	
+					for (int k = j; k >= 0; k--) {
 						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
 							break;
 
@@ -979,40 +994,96 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							
 						}
 					}
-					for (int k = 1; k < i; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+					//move bottom right	
+					for (int k = j; k < 8; k++) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
 
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
 						}
 					}
-					for (int k = 1; k < j; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i; l < 8; l++) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
 
-						if (strikeQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							goodnodes.push_back(*n);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
-							ChessTreeNode *n = new ChessTreeNode(*this);
-							if (mode > 0)
-								route.push_back(*n);
-							t.addNode(*n);
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
 							
+							}
+						}
+					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+	
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+								
+							}
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+
+							if (strikeQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								goodnodes.push_back(*n);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							} if (moveQueen(name, l,k,j,i)) {
+								ChessTreeNode *n = new ChessTreeNode(*this);
+								if (mode > 0)
+									route.push_back(*n);
+								t.addNode(*n);
+							
+							}
 						}
 					}
 					//if (!mode)
