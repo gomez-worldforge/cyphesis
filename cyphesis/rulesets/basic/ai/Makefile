@@ -10,7 +10,7 @@
 CC=gcc
 LD=ld
 
-CFLAGS=-I/usr/include/python2.7
+CFLAGS=-I/usr/include/python2.7 -I./tree
 
 LIBS=-lpython2.7 -lc -lm
 
@@ -22,7 +22,6 @@ CHESS_OBJS = tree/BoardBase.o \
 	tree/Grid.o \
 	tree/Tree.o \
 	tree/TreeNode.o
-###	tree/Py_ChessNPC.o
 
 NK_OBJS = genetic/nk/NK.o \
 	genetic/nk/Py_NK.o
@@ -32,16 +31,21 @@ NN_OBJS = nn/NN.o \
 	nn/Py_BPN.o \
 	nn/Vector.o
 
-all: chess nk nn
+WORLD_GAME_OBJS = world/game/Py_ChessNPC.o
+
+all: chess nk nn game 
 
 chess: $(CHESS_OBJS)
-	gcc -shared -o cyphesis-ai-tree-chess.so $(CHESS_OBJS) 
+	gcc -shared -o cyphesis-ai-chess-tree.so $(CHESS_OBJS) 
 
 nn: $(NN_OBJS)
 	gcc -shared -o cyphesis-ai-nn.so $(NN_OBJS)
 
 nk: $(NK_OBJS)
 	gcc -shared -o cyphesis-ai-genetic.so $(NK_OBJS)
+
+game: $(WORLD_GAME_OBJS)
+	gcc -shared -o cyphesis-ai-world-game.so $(NK_OBJS)
 
 clean:
 	rm -f *.o *.so

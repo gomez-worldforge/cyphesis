@@ -16,8 +16,8 @@ class ChessTreeNode;
 template <class N>
 class Tree : public N 
 {
-public:
-	virtual bool breadthFirstSearch(ChessTreeNode& node) = 0;
+protected:
+//AAARGH FIXME	virtual bool breadthFirstSearch(ChessTreeNode& node) = 0;
 
 private:
 	

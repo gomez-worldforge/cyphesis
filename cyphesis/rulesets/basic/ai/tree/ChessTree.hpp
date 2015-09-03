@@ -28,8 +28,8 @@ public:
 	//prepare chessboard with pieces 
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
-	//get a position from the position vector 
-	void getMove(int& row, int& col, int& oldrow, int& oldcol, int n) {
+	//get a position from the position vector, pass-by-reference 
+	void getMove(int n, int& row, int& col, int& oldrow, int& oldcol) {
 		row = positions[n];
 		col = positions[n+1];
 		oldrow = positions[n+2];

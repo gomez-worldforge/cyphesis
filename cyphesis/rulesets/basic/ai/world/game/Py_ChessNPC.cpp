@@ -18,149 +18,42 @@
 
 
 #include "Py_ChessNPC.h"
+#include "ChessTreeNode.hpp"
 
 static void ChessNPC_dealloc(PyChessNPC *self)
 {
-    self->chesstree.~ChessTree();
+    self->chesstree->~ChessTree();
     self->ob_type->tp_free(self);
 }
 
 static int ChessNPC_init(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
-    if (!PyList_Check(args)) {
-       PyErr_SetString(PyExc_TypeError, "ChessNPC() arguments should a list");
-       return -1;
-    }
     int ts = PyTuple_Size(args);
-    if (ts >= 4 || ts != 3) { 
-    	PyErr_SetString(PyExc_TypeError, "ChessNPC must take list of 3 ints");
+    if (ts != 0) { 
+    	PyErr_SetString(PyExc_TypeError, "ChessNPC does not take arguments");
         return -1;
     }
 
-    int i = 0,h = 0,o = 0;
-
-    PyObject *item;
-    item = PyTuple_GetItem(args, 0);
-    if (PyInt_Check(item)) {
-	i = (int)item;
-    }
-
-    item = PyTuple_GetItem(args, 0);
-    if (PyInt_Check(item)) {
-	h = (int)item;
-    }
-
-    item = PyTuple_GetItem(args, 0);
-    if (PyInt_Check(item)) {
-	o = (int)item;
-    }
-
-    self->net = utilai::nn::NN(i,h,o);
+    self->chesstree = new utilai::tree::chess::ChessTree();
 
     return 0;
 }
 	
-static int ChessNPC_run(PyChessNPC * self, PyObject * args, PyObject * kwds)
+static int ChessNPC_start_game(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
-    if (!PyList_Check(args)) {
-       PyErr_SetString(PyExc_TypeError, "ChessNPC() arguments should a list");
-       return -1;
-    }
     int ts = PyTuple_Size(args);
-    if (ts > 65536) { 
-    	PyErr_SetString(PyExc_TypeError, "ChessNPC must take list of less than 65536 items");
+    if (ts != 0) { 
+    	PyErr_SetString(PyExc_TypeError, "ChessNPC does not take arguments");
         return -1;
     }
 
-    PyObject * clist;
-  
-    for (int i = 0; i < ts; i++) { 
-    	clist = PyTuple_GetItem(args, i);
-    	if (!PyList_Check(clist)) {
-       		PyErr_SetString(PyExc_TypeError, "ChessNPC() arguments should a list of lists");
-       		return -1;
-    	}
-    	int ts2 = PyTuple_Size(clist);
-    	if (ts2 > 65536) { 
-    		PyErr_SetString(PyExc_TypeError, "ChessNPC must take list of lists of less than 65536 items");
-        	return -1;
-    	}
-
-	PyObject *item;
-	utilai::math::Vector<float> iv(self->net.getinputsize());	
-        for(int j = 0; j < self->net.getinputsize(); j++) {
-    		item = PyTuple_GetItem(clist, j);
-        	if (PyFloat_Check(item)) {
-                    iv.set(j, PyFloat_AsDouble(item));
-    		}
-   	}
-	
-	utilai::math::Vector<float> ov(self->net.getinputsize());	
-        for(int j = 0; j < self->net.getoutputsize(); j++) {
-    		item = PyTuple_GetItem(clist, j);
-        	if (PyFloat_Check(item)) {
-                    ov.set(j, PyFloat_AsDouble(item));
-    		}
- 	}  	
-	self->patterns.push_back(utilai::nn::Pair<utilai::math::Vector<float>,
-						utilai::math::Vector<float> >
-						(iv,ov));
-    }
- 
-    for (;;) { 
-    	int i = 0; 
-    	for (utilai::nn::PatternVectorIter vi = self->patterns.begin(); 
-			vi != self->patterns.end(); vi++, i++) { 
-    		if (self->net.propagate((*vi).first(), (*vi).second()))
-			i++;		
-    	}
-
-    	if (i == (int)(self->patterns.size()))
-    		return 0;
-    	else
-		return -1;
-    }
-    return -1; // never reached
+    self->chesstree->startGame();
+    return 1;
 }
 
-static PyObject* ChessNPC_test(PyChessNPC * self, PyObject * args, PyObject * kwds)
+static int ChessNPC_think(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
-    if (!PyList_Check(args)) {
-       PyErr_SetString(PyExc_TypeError, "ChessNPC() arguments should a list");
-       return NULL;
-    }
-    int ts = PyTuple_Size(args);
-    if (ts > 65536) { 
-    	PyErr_SetString(PyExc_TypeError, "ChessNPC must take list of less than 65536 items");
-        return NULL;
-    }
-
-    utilai::math::Vector<float> pattern(self->net.getinputsize());	
-    for (int i = 0; i < ts; i++) { 
-    	PyObject *item = PyTuple_GetItem(args, i);
-        for(int j = 0; j < self->net.getinputsize(); j++) {
-        	if (PyFloat_Check(item)) {
-                    pattern.set(j, PyFloat_AsDouble(item));
-    		} else {
-    			PyErr_SetString(PyExc_TypeError, "ChessNPC test must take list of floats");
-        		return NULL;
-    		}
-   	}
-    }
-	
-    utilai::math::Vector<float> output = self->net.test(pattern);
-    if (output.getcols() != self->net.getoutputsize()) {
-    	PyErr_SetString(PyExc_TypeError, "ChessNPC internal error : outputpattern is different from output layer size");
-       return NULL;
-
-    }	
-    PyObject *list = PyList_New(0);
-    for (int i = 0; i < self->net.getoutputsize(); i++) { 
-    	PyObject *f = PyFloat_FromDouble(output[i]);
-	PyList_Append(list, f);
-    }
-
-    return list; 
+    return 1;
 }
 
 static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
@@ -170,16 +63,15 @@ static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
     PyChessNPC * self = (PyChessNPC *)type->tp_alloc(type, 0);
     if (self != NULL) {
         //if (PyInt_Check(i) && PyInt_Check(h) && PyInt_Check(o)) {
-        new (&(self->net)) utilai::nn::NN((int)(10),
-				(int)(10),
-				(int)(10));
+    	new (&(self->chesstree)) utilai::tree::chess::ChessTree();
+       // new (&(self->chesstree)) utilai::tree::chess::ChessTree();
     }
     return (PyObject *)self;
 }
 
 static PyMethodDef ChessNPC_methods[] = {
-    {"run",             (PyCFunction)ChessNPC_run,      METH_O},
-    {"test",             (PyCFunction)ChessNPC_test,      METH_O},
+    {"startgame",             (PyCFunction)ChessNPC_start_game,      METH_O},
+    {"think",             (PyCFunction)ChessNPC_think,      METH_O},
     {NULL,              NULL}           /* sentinel */
 };
 

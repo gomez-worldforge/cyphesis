@@ -27,6 +27,8 @@ public:
 	void set(const Board& b) { board = const_cast<Board&>(b); }
 	Board& get() { return board; }
 
+protected:
+	bool breadthFirstSearch(ChessTreeNode& node) {}
 private:
 	Board board;
 };
