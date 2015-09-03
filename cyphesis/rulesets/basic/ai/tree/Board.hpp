@@ -68,7 +68,8 @@ public:
 			const int& col, const int& oldrow, const int& oldcol,
 			ChessTreeNode& t);
 	//let the AI move based on a treenode
-	bool searchMove(std::string& name, ChessTreeNode& t);
+	bool searchMove(std::string& name, ChessTreeNode& t,
+			int& row, int& col, int& oldrow, int& oldcol);
 
 	//test if the move has been done
 	bool legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, 

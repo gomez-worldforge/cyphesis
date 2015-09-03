@@ -24,34 +24,47 @@ void Board::makeMove(std::string& name, const int& row,
 }
 
 //let the AI move based on a treenode
-bool Board::searchMove(std::string& name, ChessTreeNode& t) {
+bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
+			int& oldrow, int& oldcol) {
 	if (playername == name) {
 		move(name, t);
 		
 		if (goodnodes.empty()) {//we did not strike a chess piece	
 			if (route.empty())
+				//unless nothing can move anymore
 				return false;
 			else {
 				//route is not empty so we made a single move
-				//unless nothing can move anymore
-				return false;//FIXME search for a good strike
-						//node further on in the tree
+				//we did not strike something
+				//FIXME search for a better thing than striking
+				//further on in the tree
+				for (ChessTreeNodesIter vi = route.begin();
+					vi != route.end();
+					vi++) {
+					//int row = 0, col = 0, oldrow = 0, oldcol = 0;
+					if (!legalmove(playername, (*vi),row,col,oldrow,oldcol))
+						return false;
+					else {
+						moveWhiteChessPiece(row,col,oldrow,oldcol);
+						percentage = 1;
+						return true;		
+					}	
+				}
+				//percentage = 1;
+				
+				return true;
 			}
 		} else {
 			//we stroke a chess piece so we do that move
 			//FIXME search for a better thing than striking
 			//further on in the tree
-			for (ChessTreeNodesIter vi = route.begin();
-					vi != route.end();
-					vi++) {
-				int row = 0, col = 0, oldrow = 0, oldcol = 0;
-				if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
-					return false;
-				else {
-					moveWhiteChessPiece(row,col,oldrow,oldcol);
-					percentage = 1;
-					return true;		
-				}
+			//int row = 0, col = 0, oldrow = 0, oldcol = 0;
+			if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+				return false;
+			else {
+				moveWhiteChessPiece(row,col,oldrow,oldcol);
+				percentage = 1;
+				return true;		
 			}
 		//percentage = 1;
 		}
@@ -62,13 +75,22 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 			if (route.empty())
 				return false;
 			else {
-				
-			}
-		} else {//we stroke a chess piece
-			for (ChessTreeNodesIter vi = route.begin();
+				for (ChessTreeNodesIter vi = route.begin();
 					vi != route.end();
 					vi++) {
-				int row = 0, col = 0, oldrow = 0, oldcol = 0;
+					//int row = 0, col = 0, oldrow = 0, oldcol = 0;
+					if (!legalmove(playername, (*vi),row,col,oldrow,oldcol))
+						return false;
+					else {
+						moveBlackChessPiece(row,col,oldrow,oldcol);
+						percentage = 1;
+						return true;		
+					}	
+				}
+				return true;		
+			}
+		} else {//we stroke a chess piece
+				//int row = 0, col = 0, oldrow = 0, oldcol = 0;
 				if (!legalmove(blackplayername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
 					return false;
 				else {
@@ -78,7 +100,7 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t) {
 				}
 			}
 		//percentage = 1;
-		}
+		//}
 	} 
 
 	return false;
@@ -126,6 +148,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 			
 			}
 		}
+	//}
 	} else if (blackplayername == name) {
 		int i = 0, j = 0;
 
@@ -166,7 +189,7 @@ bool Board::legalmove(std::string& name, ChessTreeNode& t, int& row, int& col, i
 			
 			}
 		}
-	} else if (blackplayername == name) {
+	 
 
 	}
 	return false;

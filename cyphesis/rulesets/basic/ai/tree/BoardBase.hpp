@@ -26,6 +26,15 @@ public:
 	//white is at the top, black at the bottom
 	//there is a board for each color
 	void startGame() {
+
+		//initialize first with free positions (number 7)
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				whiteboard[j][i] = 7;
+				blackboard[j][i] = 7;
+			}
+		}
+				
 		//pawns
 		for (int i = 0; i < 8; i++) { 
 			whiteboard[1][i] = 5;

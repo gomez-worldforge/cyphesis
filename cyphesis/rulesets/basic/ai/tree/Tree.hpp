@@ -11,13 +11,13 @@ namespace utilai
 {
 namespace tree 
 {
+class ChessTreeNode;
 
 template <class N>
 class Tree : public N 
 {
 public:
-	virtual int depth_first_search() = 0;
-	virtual int breath_first_search() = 0;
+	virtual bool breadthFirstSearch(ChessTreeNode& node) = 0;
 
 private:
 	

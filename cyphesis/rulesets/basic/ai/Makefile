@@ -22,6 +22,7 @@ CHESS_OBJS = tree/BoardBase.o \
 	tree/Grid.o \
 	tree/Tree.o \
 	tree/TreeNode.o
+###	tree/Py_ChessNPC.o
 
 NK_OBJS = genetic/nk/NK.o \
 	genetic/nk/Py_NK.o

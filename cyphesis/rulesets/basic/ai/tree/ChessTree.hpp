@@ -8,12 +8,15 @@
 /*
  */
 
+#include <list>
+
 namespace utilai
 {
 namespace tree 
 {
 namespace chess 
 {
+
 class ChessTree : protected Tree<ChessTreeNode>
 {
 public:
@@ -31,6 +34,10 @@ protected:
 
 private:
 	ChessTreeNode root;
+	//this list has quadruples of positions of the form 
+	//(row,col,oldrow,oldcol.) This is how moves that have been searched
+	//for are cached. It is filled starting with a one color after the other
+	std::list<int> positions;	
 };
 
 }//namespace chess 
