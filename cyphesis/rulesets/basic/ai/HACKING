@@ -1,3 +1,4 @@
+. set route.clear() or not
 . moves in best order are knights, bishops and towers then queens and kings
 . the chess board is made from top left to bottom right (rows and columns)
 . grep on the word FIXME to see the fixes, if there are left

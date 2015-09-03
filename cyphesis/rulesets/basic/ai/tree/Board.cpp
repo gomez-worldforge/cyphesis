@@ -32,7 +32,8 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 		if (goodnodes.empty()) {//we did not strike a chess piece	
 			if (route.empty())
 				//unless nothing can move anymore
-				return false;
+				//return to tree
+				return true;
 			else {
 				//route is not empty so we made a single move
 				//we did not strike something
@@ -73,7 +74,8 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 		
 		if (goodnodes.empty()) {//we did not strike a chess piece	
 			if (route.empty())
-				return false;
+				return true;//nothing can move anymore
+						//return to tree
 			else {
 				for (ChessTreeNodesIter vi = route.begin();
 					vi != route.end();
