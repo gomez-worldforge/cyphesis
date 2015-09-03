@@ -61,11 +61,11 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 			//NOTE 03 sept 2015 :
 			//the last goodnode is best as it beats higher
 			//percentages
-			if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+			if (!legalmove(playername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol)) {
 				//FIXME better algorithm
 				goodnodes.clear();
 				return false;
-			else {
+			} else {
 				moveWhiteChessPiece(row,col,oldrow,oldcol);
 				goodnodes.clear();
 				percentage = 1;
@@ -97,9 +97,9 @@ bool Board::searchMove(std::string& name, ChessTreeNode& t, int& row, int& col,
 			}
 		} else {//we stroke a chess piece
 				//int row = 0, col = 0, oldrow = 0, oldcol = 0;
-				if (!legalmove(blackplayername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol))
+				if (!legalmove(blackplayername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol)) {
 					return false;
-				else {
+				} else {
 					moveBlackChessPiece(row,col,oldrow,oldcol);
 					percentage = 1;
 					return true;		

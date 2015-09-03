@@ -32,6 +32,7 @@ bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
 
 	row = -1, col = -1, oldrow = -1, oldcol = -1;
 	//set board again with other player move	
+	ChessTreeNode n;	
 	if (node.get().searchMove(node.get().getNPCPlayerName(), node,
 		col,row,oldrow,oldcol)) {
 
@@ -43,11 +44,12 @@ bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
 
 		//we made 2 moves and/or strikes so the board has changed
 		//thus we continue to change the board inside another node
-		ChessTreeNode n(get());	
+		ChessTreeNode n = (get());	
 	
 		breadthFirstSearch(n);
 		return true;
 	} else {
+		last = n; 
 		return false;
 	}		
 }
@@ -61,6 +63,8 @@ bool ChessTree::buildTreeWithBoard(const Board& b)
 
 	set(const_cast<Board&>(b));
 	root = *this;
+	//clear the positions array as we start a new board
+	positions.clear();
 
 	//FIXME needs a timer and signal
 	breadthFirstSearch(root);
@@ -87,6 +91,14 @@ void ChessTree::makeMove(std::string& name, const int& row,
 	static_cast<ChessTreeNode&>(*this).get().makeMove(name, 
 							row, col, oldrow,
 							oldcol, *this);
+}
+
+//get a position from the position vector, pass-by-reference 
+void ChessTree::getMove(int n, int& row, int& col, int& oldrow, int& oldcol) {
+		row = positions[n];
+		col = positions[n+1];
+		oldrow = positions[n+2];
+		oldcol = positions[n+3];
 }
 
 }//namespace chess 

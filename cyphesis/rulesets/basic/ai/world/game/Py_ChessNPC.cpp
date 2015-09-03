@@ -68,6 +68,41 @@ static int ChessNPC_build_tree_with_board(PyChessNPC * self, PyObject * args, Py
 	return 1;
 }
 
+static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject * kwds)
+{
+    int ts = PyTuple_Size(args);
+    if (ts != 1) { 
+    	PyErr_SetString(PyExc_TypeError, "getmove takes an integer as argument");
+        return -1;
+    }
+    PyObject *item;
+    int n = 0;
+    item = PyTuple_GetItem(args, 0);
+    if (PyInt_Check(item)) {
+	n = (int)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "getmove takes an integer as argument");
+        return -1;
+    }
+
+    //pass these in pass-by-reference
+    int row = -1, col = -1, oldrow = -1, oldcol = -1;
+    self->chesstree.getMove(n, row, col, oldrow, oldcol);
+
+    //FIXME return quad in list
+    PyObject *list = PyList_New(0);
+    PyObject *i = (int)row;
+    PyList_Append(list, i);
+    i = (int)col;
+    PyList_Append(list, i);
+    i = (int)oldrow;
+    PyList_Append(list, i);
+    i = (int)oldcol;
+    PyList_Append(list, i);
+
+    return list;
+}
+
 static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
 {
     // This looks allot like the default implementation, except we call the
@@ -84,6 +119,7 @@ static PyMethodDef ChessNPC_methods[] = {
     {"startgame",             (PyCFunction)ChessNPC_start_game,      METH_O},
     {"buildtree",             (PyCFunction)ChessNPC_build_tree,      METH_O},
     {"buildtreewithboard",             (PyCFunction)ChessNPC_build_tree_with_board,      METH_O},
+    {"getmove",             (PyCFunction)ChessNPC_get_move,      METH_O},
     {NULL,              NULL}           /* sentinel */
 };
 

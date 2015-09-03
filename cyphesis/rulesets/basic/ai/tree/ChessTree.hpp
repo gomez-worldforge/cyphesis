@@ -30,12 +30,7 @@ public:
         void startGame() { static_cast<ChessTreeNode&>(*this).startGame(); } 
 
 	//get a position from the position vector, pass-by-reference 
-	void getMove(int n, int& row, int& col, int& oldrow, int& oldcol) {
-		row = positions[n];
-		col = positions[n+1];
-		oldrow = positions[n+2];
-		oldcol = positions[n+3];
-	}
+	void getMove(int n, int& row, int& col, int& oldrow, int& oldcol);
 	
 	//move deliberatly
 	void makeMove(std::string& name, const int& row, 
@@ -47,6 +42,7 @@ protected:
 
 private:
 	ChessTreeNode root;
+	ChessTreeNode last;
 	//this vector has quadruples of positions of the form 
 	//(row,col,oldrow,oldcol.) This is how moves that have been searched
 	//for are cached. It is filled starting with a one color after the other
