@@ -1761,6 +1761,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 			//choose white chess pieces
 			switch(getWhiteBoard()[j][i]) {
 				case 5:{//pawn
+					percentage = 0;
 					if (strikePawn(name, j,i)) {
 						if (strike == 5) {
 							percentage = oldpercentage;
@@ -1770,6 +1771,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 4:{//knight	
+					percentage = 0;
 					if (strikeKnight(name, j,i)) {
 						if (strike == 4) {
 							percentage = oldpercentage;
@@ -1781,6 +1783,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 				}	
 				case 3:{//tower			
 					//move down 
+					percentage = 0;
 					for (int k = i+1; k < 8; k++) {
 
 
@@ -1835,6 +1838,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 				}	
 				case 2:{//bishop
 					//move bottom right	
+					percentage = 0;
 					for (int k = j+1; k < 8; k++) {
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
@@ -1905,6 +1909,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 				}	
 				case 1:{//queen
 					//move right	
+					percentage = 0;
 					for (int k = i+1; k < 8; k++) {
 
 
@@ -2043,6 +2048,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 			//choose white chess pieces
 			switch(getBlackBoard()[j][i]) {
 				case 5:{//pawn
+					percentage = 0;
 					if (strikePawn(name, j,i)) {
 						if (strike == 5) {
 							percentage = oldpercentage;
@@ -2052,6 +2058,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 4:{//knight	
+					percentage = 0;
 					if (strikeKnight(name, j,i)) {
 						if (strike == 4) {
 							percentage = oldpercentage;
@@ -2063,6 +2070,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 				}	
 				case 3:{//tower			
 					//move down 
+					percentage = 0;
 					for (int k = i+1; k < 8; k++) {
 
 
@@ -2117,6 +2125,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 				}	
 				case 2:{//bishop
 					//move bottom right	
+					percentage = 0;
 					for (int k = j+1; k < 8; k++) {
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
@@ -2186,6 +2195,7 @@ bool Board::chess(std::string& name, ChessTreeNode& t)
 					break;
 				}	
 				case 1:{//queen
+					percentage = 0;
 					//move right	
 					for (int k = i+1; k < 8; k++) {
 
