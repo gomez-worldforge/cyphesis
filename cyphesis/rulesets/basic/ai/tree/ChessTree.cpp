@@ -11,13 +11,59 @@ namespace tree
 {
 namespace chess 
 {
+bool ChessTree::depthFirstSearchChess(ChessTreeNode& node)
+{
+	for (ChessTreeNode *n = static_cast<ChessTreeNode*>(&getNode()); !node.atEnd(); ) {
+		if (chess(*n)) {
+			//cache the position
+		/*	positions.push_back(row);	
+			positions.push_back(col);	
+			positions.push_back(oldrow);	
+			positions.push_back(oldcol);	
+		*/	return true;
+		} else {
+			//cache the position
+		/*	positions.push_back(row);	
+			positions.push_back(col);	
+			positions.push_back(oldrow);	
+			positions.push_back(oldcol);	
+		*/
+			depthFirstSearchChess(*n);
+		}
+	}
+	return false;
+}
 
-//The tree is never built, the board is adapted each 
+bool ChessTree::depthFirstSearchChessMat(ChessTreeNode& node)
+{
+	for (ChessTreeNode *n = static_cast<ChessTreeNode*>(&getNode()); !node.atEnd(); ) {
+		if (chessmat(*n)) {
+			//cache the position
+		/*	positions.push_back(row);	
+			positions.push_back(col);	
+			positions.push_back(oldrow);	
+			positions.push_back(oldcol);	
+		*/	return true;
+		} else {
+			//cache the position
+		/*	positions.push_back(row);	
+			positions.push_back(col);	
+			positions.push_back(oldrow);	
+			positions.push_back(oldcol);	
+		*/
+			depthFirstSearchChessMat(*n);
+		}
+	}
+	return false;
+}
+
+//The tree is built, the board is adapted each 
 //search for a move, then the position of that move 
-//is saved, building a tree is optional
-//This way the tree uses best-first search in the Board class
-//and is somewhat chaotic (see Board.hpp comments.)
-bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
+//is saved
+//This way the tree uses best-first search for chess piece striking in the 
+//Board class and is somewhat chaotic (see Board.hpp comments.)
+//the variable breadthnodes are good strikes or all moves which can be done
+bool ChessTree::buildBreadthFirstSearch(ChessTreeNode& node)
 {
 
 	ChessTreeNodes breadthnodes;
@@ -73,7 +119,7 @@ bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
 	for (ChessTreeNodesIter vi = breadthnodes.begin(); vi != breadthnodes.end(); vi++) {
 
 		node.addNode(*vi);
-		breadthFirstSearch(*vi);
+		buildBreadthFirstSearch(*vi);
 	}
 	return true;
 }
@@ -91,7 +137,7 @@ bool ChessTree::buildTreeWithBoard(const Board& b)
 	positions.clear();
 
 	//FIXME needs a timer and signal
-	breadthFirstSearch(root);
+	buildBreadthFirstSearch(root);
 
 	return true;
 }
@@ -103,10 +149,22 @@ bool ChessTree::buildTree()
 	root = *this;
 
 	//FIXME needs a timer and signal
-	breadthFirstSearch(root);
+	buildBreadthFirstSearch(root);
 
 	return true;
 }
+
+bool ChessTree::chess(ChessTreeNode& n)
+{
+	return get().chess(get().getCurrentPlayerName(), n);	
+}
+
+bool ChessTree::chessmat(ChessTreeNode& n)
+{
+	return get().chessmat(get().getCurrentPlayerName(), n);	
+}
+
+
 /******
 //The name of the player to make a move
 void ChessTree::makeMove(std::string& name, const int& row, 

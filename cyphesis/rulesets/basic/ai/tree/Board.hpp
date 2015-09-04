@@ -49,13 +49,15 @@ class Board : protected Grid, BoardBase
 public:
 	Board(const std::string player, const std::string blackplayer) 
 		: Grid(),BoardBase(),width(8),height(8),percentage(1),
-		  mode(10),
+		  strike(0), mode(10),
+		  currentplayername(const_cast<std::string&>(player)), 
 		  playername(const_cast<std::string&>(player)), 
 		  blackplayername(const_cast<std::string&>(blackplayer)) 
 		{}
 	Board() 
 		: Grid(),BoardBase(),width(8),height(8),percentage(1),
-		  mode(10),
+		  strike(0), mode(10),
+		  currentplayername("White"), 
 		  playername("White"), 
 		  blackplayername("Black") 
 
@@ -98,6 +100,10 @@ public:
 	bool moveKing(std::string& name, char r, char c, char oldr, char oldc);
 	bool strikeKing(std::string& name, char r, char c, char oldr, char oldc);
 
+	//check for a chess position depending on playername
+	bool chess(std::string& name, ChessTreeNode& t);
+	//check for a chess mat position depending on playername, winning pos
+	bool chessmat(std::string& name, ChessTreeNode& t);
 	//mode set for play
 	//mode 0 is for best play, higher and lower change the list search
 	//in the function searchMove (see above)
@@ -105,10 +111,11 @@ public:
 
 private:
 	int height, width;
-	int percentage; //strike lower value	
+	int percentage; //strike upper value	
+	int strike; //strike value	
 	int mode;
 
-	std::string playername, blackplayername;
+	std::string playername, blackplayername, currentplayername;
 	ChessTreeNodes goodnodes;
 	ChessTreeNodes route;
 
@@ -116,6 +123,7 @@ public:
 	Board& getBoard() { return (*this); }
 	char getWhiteBoardXY(int x, int y) { return (getWhiteBoard())[y][x]; }
 	char getBlackBoardXY(int x, int y) { return (getBlackBoard())[y][x]; }
+	std::string& getCurrentPlayerName() { return currentplayername; }
 	std::string& getPlayerName() { return playername; }
 	std::string& getNPCPlayerName() { return blackplayername; }
 

@@ -27,6 +27,11 @@ void Board::makeMove(std::string& name, const int& row,
 //pass-by-reference on the position
 bool Board::searchMove(ChessTreeNodes& l, std::string& name, ChessTreeNode& t, int& row, int& col,
 			int& oldrow, int& oldcol) {
+
+	goodnodes.clear();
+
+	currentplayername = name;
+
 	if (playername == name) {
 		move(name, t);
 		
@@ -70,11 +75,10 @@ bool Board::searchMove(ChessTreeNodes& l, std::string& name, ChessTreeNode& t, i
 				goodnodes.clear();
 				return false;
 			} else {
-				//we do not move here
-				//moveWhiteChessPiece(row,col,oldrow,oldcol);
+				//we do move here
+				moveWhiteChessPiece(row,col,oldrow,oldcol);
 				//but return the goodnodes
 				l = goodnodes;
-				goodnodes.clear();
 				percentage = 1;
 				return true;		
 			}
@@ -109,10 +113,11 @@ bool Board::searchMove(ChessTreeNodes& l, std::string& name, ChessTreeNode& t, i
 		} else {//we stroke a chess piece
 				//int row = 0, col = 0, oldrow = 0, oldcol = 0;
 				if (!legalmove(blackplayername, goodnodes[goodnodes.size()-1],row,col,oldrow,oldcol)) {
+					goodnodes.clear();
 					return false;
 				} else {
-					//we do not move here	
-					//moveBlackChessPiece(row,col,oldrow,oldcol);
+					//we do move here	
+					moveBlackChessPiece(row,col,oldrow,oldcol);
 					//but return the goodnodes
 					l = goodnodes;
 					percentage = 1;
@@ -253,8 +258,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					//move down 
 					for (int k = i+1; k < 8; k++) {
 
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -262,7 +265,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} 
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -273,8 +279,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move right 
 					for (int k = j+1; k < 8; k++) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -282,7 +286,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, j,k,j,i)) {
+						} 
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -292,8 +299,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move left	
 					for (int k = i-1; k >= 0; k--) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -301,7 +306,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, j,k,j,i)) {
+						} 
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -311,8 +319,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move up	
 					for (int k = j-1; k >= 0; k--) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -320,7 +326,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} 
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -338,8 +347,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -347,7 +354,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							} 
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -361,8 +371,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -370,7 +378,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -384,8 +395,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 	
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -393,7 +402,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -407,8 +419,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -416,7 +426,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -434,8 +447,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					//move right	
 					for (int k = i+1; k < 8; k++) {
 
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -443,7 +454,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -454,8 +468,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move down 
 					for (int k = j+1; k < 8; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -463,7 +475,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -473,8 +488,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move left	
 					for (int k = i-1; k >= 0; k--) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -482,7 +495,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -492,8 +508,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move up	
 					for (int k = j-1; k >= 0; k--) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -501,7 +515,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -514,8 +531,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -523,7 +538,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -537,8 +555,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -546,7 +562,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -560,8 +579,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 	
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -569,7 +586,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							} 
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -583,8 +603,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -592,7 +610,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -608,6 +629,8 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 0:{//king
+					//FIXME king may not move next to
+					//the opposite king
 					if (strikeKing(name, j-1,i-1,j,i)) {
 						ChessTreeNode *n = new ChessTreeNode(*this);
 						goodnodes.push_back(*n);
@@ -754,8 +777,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					//move down 
 					for (int k = i+1; k < 8; k++) {
 
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -763,7 +784,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						} 
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -774,8 +798,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move right 
 					for (int k = j+1; k < 8; k++) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -783,7 +805,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -793,8 +818,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move left	
 					for (int k = i-1; k >= 0; k--) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -802,7 +825,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -812,8 +838,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move up	
 					for (int k = j-1; k >= 0; k--) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -821,7 +845,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveTower(name, k,i,j,i)) {
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveTower(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -841,8 +868,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -850,7 +875,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -864,8 +892,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -873,7 +899,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -887,8 +916,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 	
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -896,7 +923,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -910,8 +940,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
-								break;
 
 							if (strikeBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -919,7 +947,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveBishop(name, l,k,j,i)) {
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+							if (moveBishop(name, l,k,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -937,8 +968,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					//move right	
 					for (int k = i+1; k < 8; k++) {
 
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -946,7 +975,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -957,8 +989,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move down 
 					for (int k = j+1; k < 8; k++) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
-							break;
 
 						if (strikeQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -966,7 +996,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+						if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -976,8 +1009,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move left	
 					for (int k = i-1; k >= 0; k--) {
-						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -985,7 +1016,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, j,k,j,i)) {
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveQueen(name, j,k,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -995,8 +1029,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					}
 					//move up	
 					for (int k = j-1; k >= 0; k--) {
-						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
-							break;
 
 						if (strikeQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
@@ -1004,7 +1036,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 							if (mode > 0)
 								route.push_back(*n);
 							t.addNode(*n);
-						} if (moveQueen(name, k,i,j,i)) {
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+						if (moveQueen(name, k,i,j,i)) {
 							ChessTreeNode *n = new ChessTreeNode(*this);
 							if (mode > 0)
 								route.push_back(*n);
@@ -1017,8 +1052,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -1026,7 +1059,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -1040,8 +1076,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i+1; l < 8; l++) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -1049,7 +1083,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -1063,8 +1100,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 	
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -1072,7 +1107,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -1086,8 +1124,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 						for (int l = i-1; l >= 0; l--) {
 							if (k != l)
 								continue;
-							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
-								break;
 
 							if (strikeQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
@@ -1095,7 +1131,10 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 								if (mode > 0)
 									route.push_back(*n);
 								t.addNode(*n);
-							} if (moveQueen(name, k,l,j,i)) {
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+							if (moveQueen(name, k,l,j,i)) {
 								ChessTreeNode *n = new ChessTreeNode(*this);
 								if (mode > 0)
 									route.push_back(*n);
@@ -1109,105 +1148,6 @@ bool Board::move(std::string& name, ChessTreeNode& t)
 					break;
 				}
 				case 0:{//king
-					if (strikeKing(name, j-1,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j-1,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j-1,i,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j-1,i,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j-1,i+1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j-1,i+1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j,i+1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j,i+1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j+1,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j+1,i-1,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (strikeKing(name, j+1,i,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					if (moveKing(name, j+1,i,j,i)) {
-						ChessTreeNode *n = new ChessTreeNode(*this);
-						goodnodes.push_back(*n);
-						if (mode > 0)
-							route.push_back(*n);
-						t.addNode(*n);
-					}
-					break;
 				}	
 				case 7:{
 					//empty position
@@ -1501,7 +1441,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;			
 				} else {
@@ -1513,7 +1453,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {
@@ -1527,7 +1467,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 				case 7:
 					return false;
 				default:
-					if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+1])) > percentage) {
+					if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+1])) > percentage) {
 						percentage >>= 2;
 						return true;
 					} else {
@@ -1535,7 +1475,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 					}
 				}
 			default:
-				if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {
@@ -1549,7 +1489,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;			
 				} else {
@@ -1561,7 +1501,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 			case 7:
 				return false;
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {
@@ -1575,7 +1515,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 				case 7:
 					return false;
 				default:
-					if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
+					if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+1])) > percentage) {
 						percentage >>= 2;
 						return true;
 					} else {
@@ -1583,7 +1523,7 @@ bool Board::strikePawn(std::string& name, char r, char c)
 					}
 				}
 			default:
-				if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
+				if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-1])) > percentage) {
 					percentage >>= 2;
 					return true;
 				} else {
@@ -1599,7 +1539,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r+2][c-1] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+2][c-1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+2][c-1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1607,7 +1547,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r+2][c+1] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+2][c+1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+2][c+1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1615,7 +1555,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r-2][c-1] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-2][c-1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-2][c-1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1623,7 +1563,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r-2][c+1] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-2][c+1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-2][c+1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1631,7 +1571,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r+1][c-2] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c-2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1639,7 +1579,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r+1][c+2] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r+1][c+2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1647,7 +1587,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r-1][c+2] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-1][c+2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-1][c+2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1655,7 +1595,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getBlackBoard()[r-1][c-2] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-1][c-2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[r][c], getBlackBoard()[r-1][c-2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1664,7 +1604,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 		}
 	} else if (blackplayername == name) {
 		if (getWhiteBoard()[r+2][c-1] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+2][c-1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+2][c-1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1672,7 +1612,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r+2][c+1] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+2][c+1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+2][c+1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1680,7 +1620,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r-2][c-1] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-2][c-1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-2][c-1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1688,7 +1628,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r-2][c+1] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-2][c+1])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-2][c+1])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1696,7 +1636,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r+1][c-2] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c-2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c-2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1704,7 +1644,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r+1][c+2] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c+2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r+1][c+2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1712,7 +1652,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r-1][c+2] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c+2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1720,7 +1660,7 @@ bool Board::strikeKnight(std::string& name, char r, char c)
 			}
 		}
 		else if (getWhiteBoard()[r-1][c-2] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-2])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[r][c], getWhiteBoard()[r-1][c-2])) > percentage) {
 				percentage >>= 2;
 				return true;			
 			} else {
@@ -1735,14 +1675,14 @@ bool Board::strikeTower(std::string& name, char r, char c, char oldr, char oldc)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
 		}	
 	} else if (name == blackplayername) { 
 		if (getWhiteBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
@@ -1755,14 +1695,14 @@ bool Board::strikeBishop(std::string& name, char r, char c, char oldr, char oldc
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
 		}	
 	} else if (name == blackplayername) { 
 		if (getWhiteBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
@@ -1775,14 +1715,14 @@ bool Board::strikeQueen(std::string& name, char r, char c, char oldr, char oldc)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
 		}	
 	} else if (name == blackplayername) { 
 		if (getWhiteBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
@@ -1795,14 +1735,14 @@ bool Board::strikeKing(std::string& name, char r, char c, char oldr, char oldc)
 {
 	if (name == playername) { 
 		if (getBlackBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getWhiteBoard()[oldr][oldc], getBlackBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
 		}	
 	} else if (name == blackplayername) { 
 		if (getWhiteBoard()[r][c] != 7) {
-			if (static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
+			if (strike = static_cast<int>(strikeWith(getBlackBoard()[oldr][oldc], getWhiteBoard()[r][c])) > percentage) {
 				percentage >>= 2;
 				return true;		
 			}
@@ -1811,6 +1751,589 @@ bool Board::strikeKing(std::string& name, char r, char c, char oldr, char oldc)
 	return false;
 }
 
+bool Board::chess(std::string& name, ChessTreeNode& t)
+{
+	int oldpercentage = percentage;
+	percentage = 0;
+	if (name == playername) {
+	for (int j = 0; j < height; j++) {
+		for (int i = 0; i < width; i++) {
+			//choose white chess pieces
+			switch(getWhiteBoard()[j][i]) {
+				case 5:{//pawn
+					if (strikePawn(name, j,i)) {
+						if (strike == 5) {
+							percentage = oldpercentage;
+							return true;	
+						}
+					}
+					break;
+				}
+				case 4:{//knight	
+					if (strikeKnight(name, j,i)) {
+						if (strike == 4) {
+							percentage = oldpercentage;
+							return true;
+						}	
+					}
+					
+					break;
+				}	
+				case 3:{//tower			
+					//move down 
+					for (int k = i+1; k < 8; k++) {
+
+
+						if (strikeTower(name, k,i,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move right 
+					for (int k = j+1; k < 8; k++) {
+						if (strikeTower(name, j,k,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+
+					}
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (strikeTower(name, j,k,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+
+					}
+					//move up	
+					for (int k = j-1; k >= 0; k--) {
+
+						if (strikeTower(name, k,i,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//if (!mode)	
+					//	route.push_back(*n);
+					break;
+				}	
+				case 2:{//bishop
+					//move bottom right	
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+	
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					//t.addNode(*n);
+					break;
+				}	
+				case 1:{//queen
+					//move right	
+					for (int k = i+1; k < 8; k++) {
+
+
+						if (strikeQueen(name, j,k,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+					}
+					//move down 
+					for (int k = j+1; k < 8; k++) {
+
+						if (strikeQueen(name, k,i,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+					}
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+
+						if (strikeQueen(name, j,k,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move up	
+					for (int k = j-1; k >= 0; k--) {
+
+						if (strikeQueen(name, k,i,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move bottom right	
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+	
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					break;
+				}
+				case 0:{//king
+					//kings may not touch each other so
+					//you cannot strike with him here 
+					break;
+				}	
+				case 7:{
+					//empty position
+					break;
+				}	
+				default:
+					break;
+			}
+	
+		}
+	}
+	} else if (name == blackplayername) {
+	for (int j = 0; j < height; j++) {
+		for (int i = 0; i < width; i++) {
+			//choose white chess pieces
+			switch(getBlackBoard()[j][i]) {
+				case 5:{//pawn
+					if (strikePawn(name, j,i)) {
+						if (strike == 5) {
+							percentage = oldpercentage;
+							return true;	
+						}
+					}
+					break;
+				}
+				case 4:{//knight	
+					if (strikeKnight(name, j,i)) {
+						if (strike == 4) {
+							percentage = oldpercentage;
+							return true;
+						}	
+					}
+					
+					break;
+				}	
+				case 3:{//tower			
+					//move down 
+					for (int k = i+1; k < 8; k++) {
+
+
+						if (strikeTower(name, k,i,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move right 
+					for (int k = j+1; k < 8; k++) {
+						if (strikeTower(name, j,k,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+
+					}
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+						if (strikeTower(name, j,k,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+
+					}
+					//move up	
+					for (int k = j-1; k >= 0; k--) {
+
+						if (strikeTower(name, k,i,j,i)) {
+							if (strike == 3) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//if (!mode)	
+					//	route.push_back(*n);
+					break;
+				}	
+				case 2:{//bishop
+					//move bottom right	
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+	
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+
+							if (strikeBishop(name, l,k,j,i)) {
+								if (strike == 2) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(l,k) != 7 || getBlackBoardXY(l,k) != 7)
+								break;
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					//t.addNode(*n);
+					break;
+				}	
+				case 1:{//queen
+					//move right	
+					for (int k = i+1; k < 8; k++) {
+
+
+						if (strikeQueen(name, j,k,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+					}
+					//move down 
+					for (int k = j+1; k < 8; k++) {
+
+						if (strikeQueen(name, k,i,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(j,k) != 7)
+							break;
+					}
+					//move left	
+					for (int k = i-1; k >= 0; k--) {
+
+						if (strikeQueen(name, j,k,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(j,k) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move up	
+					for (int k = j-1; k >= 0; k--) {
+
+						if (strikeQueen(name, k,i,j,i)) {
+							if (strike == 1) {
+								percentage = oldpercentage;
+								return true;
+							}	
+						}
+						if (getWhiteBoardXY(k,i) != 7 || getBlackBoardXY(k,i) != 7)
+							break;
+					}
+					//move bottom right	
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move up right
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i+1; l < 8; l++) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move left bottom
+					for (int k = j+1; k < 8; k++) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+	
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//move left up
+					for (int k = j-1; k >= 0; k--) {
+						for (int l = i-1; l >= 0; l--) {
+							if (k != l)
+								continue;
+
+							if (strikeQueen(name, k,l,j,i)) {
+								if (strike == 1) {
+									percentage = oldpercentage;
+									return true;
+								}	
+							}
+							if (getWhiteBoardXY(k,l) != 7 || getBlackBoardXY(k,l) != 7)
+								break;
+						}
+					}
+					//if (!mode)
+					//	route.push_back(*n);
+					break;
+				}
+				case 0:{//king
+					//kings may not touch each other so
+					//you cannot strike with him here 
+					break;
+				}	
+				case 7:{
+					//empty position
+					break;
+				}	
+				default:
+					break;
+			}
+	
+		}
+	}
+
+	}
+	percentage = oldpercentage;
+	return false;
+}
+
+bool Board::chessmat(std::string& name, ChessTreeNode& t)
+{
+	if (name == playername) {
+		return chess(name, t);
+	} else if (name == blackplayername) {
+		return chess(name, t);
+	}
+}
+		
 }//namespace chess 
 }//namespace tree 
 }//namespace utilai	

@@ -21,7 +21,8 @@ public:
 	ChessTreeNode(Board b) : board(b) {}
 	~ChessTreeNode() {}
 
-	void addNode(ChessTreeNode tn) { static_cast<TreeNode>(*this).addNode(tn); }
+	void addNode(TreeNode& tn) { static_cast<TreeNode>(*this).addNode(tn); }
+	TreeNode& getNode() { static_cast<TreeNode>(*this).getNode(); }
 	void startGame() { board.startGame(); }
 
 	void set(const Board& b) { board = const_cast<Board&>(b); }

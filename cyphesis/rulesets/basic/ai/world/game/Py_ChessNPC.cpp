@@ -68,6 +68,21 @@ static int ChessNPC_build_tree_with_board(PyChessNPC * self, PyObject * args, Py
 	return 1;
 }
 
+//search for Chess position
+static int ChessNPC_search_chess(PyChessNPC * self, PyObject * args, PyObject * kwds)
+{
+    	self->chesstree.depthFirstSearchChess(self->chesstree);
+	
+	return 1;
+}
+
+//search for winning position
+static int ChessNPC_search_chess_mat(PyChessNPC * self, PyObject * args, PyObject * kwds)
+{
+    	self->chesstree.depthFirstSearchChessMat(self->chesstree);
+	
+	return 1;
+}
 static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
     int ts = PyTuple_Size(args);
@@ -119,6 +134,8 @@ static PyMethodDef ChessNPC_methods[] = {
     {"startgame",             (PyCFunction)ChessNPC_start_game,      METH_O},
     {"buildtree",             (PyCFunction)ChessNPC_build_tree,      METH_O},
     {"buildtreewithboard",             (PyCFunction)ChessNPC_build_tree_with_board,      METH_O},
+    {"searchchess",             (PyCFunction)ChessNPC_search_chess,      METH_O},
+    {"searchchessmat",             (PyCFunction)ChessNPC_search_chess_mat,      METH_O},
     {"getmove",             (PyCFunction)ChessNPC_get_move,      METH_O},
     {NULL,              NULL}           /* sentinel */
 };

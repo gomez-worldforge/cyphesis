@@ -87,8 +87,15 @@ public:
 
 
 protected:
-	//main recursive algorithm
-	bool breadthFirstSearch(ChessTreeNode& node);
+	//main recursive algorithms
+	bool depthFirstSearchChess(ChessTreeNode& node);
+	bool depthFirstSearchChessMat(ChessTreeNode& node);
+	bool buildBreadthFirstSearch(ChessTreeNode& node);
+
+	//king stands in chess position
+	bool chess(ChessTreeNode& n);
+	//winning position
+	bool chessmat(ChessTreeNode& n);
 
 private:
 	ChessTreeNode root;
