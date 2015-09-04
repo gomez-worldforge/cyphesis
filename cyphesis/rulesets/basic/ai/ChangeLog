@@ -1,3 +1,5 @@
+04 sep 2015:
+	. made an Adapter for ChessTree
 03 sep 2015:
 	. made world directory in main ai directory and populated it
 	. bugfix: init of white and black boards with 7 (empty positions)

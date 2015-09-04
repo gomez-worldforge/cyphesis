@@ -73,7 +73,7 @@ static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject 
     int ts = PyTuple_Size(args);
     if (ts != 1) { 
     	PyErr_SetString(PyExc_TypeError, "getmove takes an integer as argument");
-        return -1;
+        return NULL;
     }
     PyObject *item;
     int n = 0;
@@ -82,22 +82,22 @@ static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject 
 	n = (int)item;
     } else {
     	PyErr_SetString(PyExc_TypeError, "getmove takes an integer as argument");
-        return -1;
+        return NULL;
     }
 
     //pass these in pass-by-reference
     int row = -1, col = -1, oldrow = -1, oldcol = -1;
-    self->chesstree.getMove(n, row, col, oldrow, oldcol);
+    static_cast<utilai::tree::chess::ChessTree::ChessTreeAdapter*>(self->chesstree.createAdapter())->getMove(n, row, col, oldrow, oldcol);
 
     //FIXME return quad in list
     PyObject *list = PyList_New(0);
-    PyObject *i = (int)row;
+    PyObject *i = Py_BuildValue("i", row);
     PyList_Append(list, i);
-    i = (int)col;
+    i = Py_BuildValue("i", col);
     PyList_Append(list, i);
-    i = (int)oldrow;
+    i = Py_BuildValue("i", oldrow);
     PyList_Append(list, i);
-    i = (int)oldcol;
+    i = Py_BuildValue("i", oldcol);
     PyList_Append(list, i);
 
     return list;

@@ -3,6 +3,7 @@
 
 
 #include "ChessTree.hpp"
+#include "Board.hpp"
 
 namespace utilai
 {
@@ -18,40 +19,63 @@ namespace chess
 //and is somewhat chaotic (see Board.hpp comments.)
 bool ChessTree::breadthFirstSearch(ChessTreeNode& node)
 {
+
+	ChessTreeNodes breadthnodes;
+	
 	//pass-by-reference for a move
 	int row = -1, col = -1, oldrow = -1, oldcol = -1;
 	//set board inside this node to let the AI move
-	if (node.get().searchMove(node.get().getPlayerName(), node, 
+	if (node.get().searchMove(breadthnodes, node.get().getPlayerName(), node, 
 		row,col,oldrow,oldcol)) {
-		//cache the position FIXME check for legal move here
-		positions.push_back(row);	
-		positions.push_back(col);	
-		positions.push_back(oldrow);	
-		positions.push_back(oldcol);	
+		//FIXME do something here for if there's no nodes
 	}
 
+	for (ChessTreeNodesIter vi = breadthnodes.begin(); vi != breadthnodes.end(); vi++) {
+
+		node.addNode(*vi);
+	}
+
+	//FIXME do the move here NOT on the board but in the node 
+
+	/****
+	//cache the position FIXME check for legal move here
+	positions.push_back(row);	
+	positions.push_back(col);	
+	positions.push_back(oldrow);	
+	positions.push_back(oldcol);	
+	***/
 	row = -1, col = -1, oldrow = -1, oldcol = -1;
 	//set board again with other player move	
 	ChessTreeNode n;	
-	if (node.get().searchMove(node.get().getNPCPlayerName(), node,
+	if (node.get().searchMove(breadthnodes, node.get().getNPCPlayerName(), node,
 		col,row,oldrow,oldcol)) {
-
+		//FIXME do something here for if there's no nodes
+		/**** FIXME
 		//cache the position FIXME check for legal move here
 		positions.push_back(row);	
 		positions.push_back(col);	
 		positions.push_back(oldrow);	
 		positions.push_back(oldcol);	
-
+	
 		//we made 2 moves and/or strikes so the board has changed
 		//thus we continue to change the board inside another node
-		ChessTreeNode n = (get());	
-	
-		breadthFirstSearch(n);
-		return true;
+		ChessTreeNode n = get();	
+
+		//contruct tree further
+		node.addNode(n);
+	return true;
 	} else {
 		last = n; 
 		return false;
 	}		
+		*****/
+	}		
+	for (ChessTreeNodesIter vi = breadthnodes.begin(); vi != breadthnodes.end(); vi++) {
+
+		node.addNode(*vi);
+		breadthFirstSearch(*vi);
+	}
+	return true;
 }
 
 //current should contain a board constructed with names
@@ -83,7 +107,7 @@ bool ChessTree::buildTree()
 
 	return true;
 }
-
+/******
 //The name of the player to make a move
 void ChessTree::makeMove(std::string& name, const int& row, 
 			const int& col, const int& oldrow, const int& oldcol,
@@ -99,6 +123,11 @@ void ChessTree::getMove(int n, int& row, int& col, int& oldrow, int& oldcol) {
 		col = positions[n+1];
 		oldrow = positions[n+2];
 		oldcol = positions[n+3];
+}
+*******/
+ChessTree::Adapter* ChessTree::createAdapter()
+{
+	return new ChessTree::ChessTreeAdapter(this);
 }
 
 }//namespace chess 

@@ -31,6 +31,16 @@ protected:
 	bool breadthFirstSearch(ChessTreeNode& node) {}
 private:
 	Board board;
+
+public:
+	ChessTreeNode operator=(ChessTreeNode n) {
+		/* if (*this == n) return (*this); */
+		this->board = n.board;
+		
+		return *this;
+	}
+
+
 };
 
 }//namespace chess 

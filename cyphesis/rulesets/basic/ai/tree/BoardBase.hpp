@@ -97,8 +97,8 @@ public:
 		//if (&b == this)
 		//	return *this;
 		
-		std::memcpy((char **)(this->whiteboard), (char **)(b.whiteboard), 64);
-		std::memcpy((char **)(this->blackboard), (char **)(b.blackboard), 64);
+		std::memcpy(this->whiteboard, (const char **)(b.whiteboard), 64);
+		std::memcpy(this->blackboard, (const char **)(b.blackboard), 64);
 	}
 
 };
