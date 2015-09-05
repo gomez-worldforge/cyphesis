@@ -83,6 +83,7 @@ static int ChessNPC_search_chess_mat(PyChessNPC * self, PyObject * args, PyObjec
 	
 	return 1;
 }
+
 static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject * kwds)
 {
     int ts = PyTuple_Size(args);
@@ -117,6 +118,60 @@ static PyObject* ChessNPC_get_move(PyChessNPC * self, PyObject * args, PyObject 
 
     return list;
 }
+static int ChessNPC_make_move(PyChessNPC * self, PyObject * args, PyObject * kwds)
+{
+    int ts = PyTuple_Size(args);
+    if (ts != 5) { 
+    	PyErr_SetString(PyExc_TypeError, "makemove takes a name and 4 integers as argument");
+        return NULL;
+    }
+    PyObject *item;
+    int row = -1, col = -1, oldrow = -1, oldcol = -1;
+    item = PyTuple_GetItem(args, 0);
+    if (PyInt_Check(item)) {
+	row = (int)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "makemove takes an integer as second argument");
+        return NULL;
+    }
+
+    if (PyInt_Check(item)) {
+	col = (int)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "makemove takes an integer as third argument");
+        return NULL;
+    }
+
+    if (PyInt_Check(item)) {
+	oldrow = (int)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "makemove takes an integer as fourth argument");
+        return NULL;
+    }
+
+    if (PyInt_Check(item)) {
+	oldcol = (int)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "makemove takes an integer as fifth argument");
+        return NULL;
+    }
+
+    char *namestr;
+    if (PyString_Check(item)) {
+	namestr = (char*)item;
+    } else {
+    	PyErr_SetString(PyExc_TypeError, "makemove takes an string as first argument");
+        return NULL;
+    }
+
+    const std::string& name = namestr;
+    //pass these in pass-by-reference
+    static_cast<utilai::tree::chess::ChessTree&>(self->chesstree).makeMove(const_cast<std::string&>(name), row, col, oldrow, oldcol, self->chesstree);
+
+    //FIXME return quad in list
+
+    return 1;
+}
 
 static PyObject * ChessNPC_new(PyTypeObject * type, PyObject *, PyObject *)
 {
@@ -137,6 +192,7 @@ static PyMethodDef ChessNPC_methods[] = {
     {"searchchess",             (PyCFunction)ChessNPC_search_chess,      METH_O},
     {"searchchessmat",             (PyCFunction)ChessNPC_search_chess_mat,      METH_O},
     {"getmove",             (PyCFunction)ChessNPC_get_move,      METH_O},
+    {"makemove",             (PyCFunction)ChessNPC_make_move,      METH_O},
     {NULL,              NULL}           /* sentinel */
 };
 

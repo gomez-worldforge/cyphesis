@@ -41,7 +41,14 @@ public:
 		return *this;
 	}
 
-
+	std::vector<int>& getPositions() { return positions; }
+	void addPosition(int row, int col, int oldrow, int oldcol) { 
+		positions.push_back(row); 
+		positions.push_back(col); 
+		positions.push_back(oldrow); 
+		positions.push_back(oldcol); 
+	}
+	std::vector<int> positions;
 };
 
 }//namespace chess 

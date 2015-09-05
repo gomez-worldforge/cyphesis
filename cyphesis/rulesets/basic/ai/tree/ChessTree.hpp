@@ -69,8 +69,8 @@ public:
 	~ChessTree() {}
 
 	//The name of the player to make a move, then set the board
-	void makeMove(std::string& name, const int& row, 
-		const int& col, const int& oldrow, const int& oldcol,
+	void makeMove(std::string& name, int& row, 
+		int& col, int& oldrow, int& oldcol,
 		ChessTreeNode& t) {
 			static_cast<ChessTreeNode&>(*this).get().makeMove(name, 
 						row, col, oldrow,
@@ -85,13 +85,13 @@ public:
 	
 	virtual ChessTree::Adapter* createAdapter();
 
-
-protected:
 	//main recursive algorithms
 	bool depthFirstSearchChess(ChessTreeNode& node);
 	bool depthFirstSearchChessMat(ChessTreeNode& node);
 	bool buildBreadthFirstSearch(ChessTreeNode& node);
 
+
+protected:
 	//king stands in chess position
 	bool chess(ChessTreeNode& n);
 	//winning position
